@@ -1,0 +1,79 @@
+%{
+    #include<string.h>
+    #include<glib.h>
+    #include<time.h>
+    typedef struct comment
+    {
+        GString* id;
+        GString* user;
+        GString* date;
+        gint timestamp;
+        GString* commentText;
+        gint likes;
+        gboolean hasReplies;
+        gint numberOfReplies;
+        GArray* replies;
+    }* Comment; 
+
+    GArray * commentThread;
+%}
+
+
+%option noyywrap yylineno
+%x DATE NAME TEXT
+%{
+    gint dateToTimestamp(char* date);
+%}
+%%      
+                                                Comment c;
+\-t\"[ ][id]{2}=\"[a-z0-9]{6}                   { c = g_new(struct comment,1); c->id = g_string_new(yytext+8);} 
+rel=\"nofollow\">[A-Za-z 0-9.,]+                { c->user = g_string_new(yytext+15);}
+[ ]+Conta.*                                     { c->user = g_string_new(yytext+16);}
+permalink\">[0-9 .:]+                           { c->date = g_string_new(yytext+11);}
+datetime=\"[0-9\-T:.]+/[\"\>]                   { c->timestamp = dateToTimestamp(yytext+10);}
+
+\<p\>                                           BEGIN TEXT;c->commentText = g_string_new("");
+<TEXT>\n[ ]+<\/p>                               BEGIN 0;
+<TEXT>\n<\/p>                                   BEGIN 0;
+<TEXT>\n                                        {}
+<TEXT>[ ]+                                      {}
+<TEXT>.*                                        { g_string_append(c->commentText, yytext); g_array_append_val(commentThread,c);}                                            
+    
+.|\n                                            {}
+
+%%
+
+gint dateToTimestamp(char* date){
+    struct tm time;
+    strptime(date, "%Y-%m-%dT%H:%M:%S", &time);
+    time_t loctime = mktime(&time);
+    gint millis = atoi(date+20);
+    gint resultado = (gint)loctime + millis;
+    return resultado;
+}
+
+void printComment(Comment comment){
+    printf("Comment:\n");
+    printf("\tId: %s\n", comment->id->str);
+    printf("\tUser: %s\n",comment->user->str);
+    printf("\tDate: %s\n",comment->date->str);
+    printf("\tTimestamp: %d\n", comment->timestamp);
+    printf("\tCommentText: %s\n", comment->commentText->str);
+}
+
+void printCommentThread(){
+    Comment c;
+    for(gint i = 0 ; i < commentThread->len ; i++){
+         c = g_array_index(commentThread,Comment,i);
+         printComment(c);
+    } 
+}
+
+int main(int argc, char* argv[]){
+    if(argc == 2){yyin = fopen(argv[1],"r");}
+    commentThread = g_array_new(FALSE,FALSE,sizeof(Comment));
+    yylex();
+    printCommentThread();
+    printf("\n\n\n%d\n\n\n",commentThread->len);
+    return 0;
+}
