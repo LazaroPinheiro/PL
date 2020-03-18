@@ -9,13 +9,12 @@
         GString* date;
         gint timestamp;
         GString* commentText;
-        gint likes;
         gboolean hasReplies;
         gint numberOfReplies;
         GArray* replies;
     }* Comment; 
 
-    GArray * commentThread;
+    GArray* commentThread;
 %}
 
 
@@ -25,22 +24,26 @@
 letra           [a-zA-Z\xc0-\xff]
 
 %{
+    void insertCommentReply(Comment comment, gboolean isReply);
     gint dateToTimestamp(char* date);
 %}
 
 %%      
-                                                Comment c;
-\-t\"\ id=\"[a-z0-9]{6}                         c = g_new(struct comment,1); c->id = g_string_new(yytext+8);
+                                                Comment c; gboolean isReply = FALSE;
+
+\<form                                          isReply = FALSE;
+
+\-t\"\ id=\"[a-z0-9]{6}                         c = g_new(struct comment,1); insertCommentReply(c, isReply); c->hasReplies = FALSE; c->id = g_string_new(yytext+8);
 
 rel=\"nofollow\">[a-zA-Z 0-9.,]+                c->user = g_string_new(yytext+15);
 [ ]+Conta.*                                     c->user = g_string_new(yytext+16);
 
 permalink\">[0-9 .:]+                           c->date = g_string_new(yytext+11);
-datetime=\"[0-9\-T:.]+/[\"\>]                   c->timestamp = dateToTimestamp(yytext+10); g_array_append_val(commentThread,c);
+datetime=\"[0-9\-T:.]+/[\"\>]                   c->timestamp = dateToTimestamp(yytext+10);
 
 \<p\>                                           BEGIN TEXT; c->commentText = g_string_new("");
-<TEXT>\n[ ]+<\/p>                               BEGIN 0;
-<TEXT>\n<\/p>                                   BEGIN 0; 
+<TEXT>\n[ ]+<\/p>                               BEGIN 0; isReply = TRUE;
+<TEXT>\n<\/p>                                   BEGIN 0; isReply = TRUE;
 <TEXT>\n                                        { }
 <TEXT>\n[ ]+                                    { }
 <TEXT>({letra}|[0-9]).*                         g_string_append(c->commentText,yytext);                                           
@@ -48,6 +51,21 @@ datetime=\"[0-9\-T:.]+/[\"\>]                   c->timestamp = dateToTimestamp(y
 .|\n                                            {}
 
 %%
+
+void insertCommentReply(Comment comment, gboolean isReply){
+    if(isReply == FALSE){
+        comment->numberOfReplies = 0;
+        g_array_append_val(commentThread,comment);
+    } else {
+        Comment c = g_array_index(commentThread,Comment,(commentThread->len)-1);
+        if(c->hasReplies == FALSE){
+            c->replies = g_array_new(FALSE,FALSE,sizeof(Comment));
+        }
+        g_array_append_val(c->replies,comment);
+        c->hasReplies = TRUE;
+        c->numberOfReplies++;
+    }
+}
 
 gint dateToTimestamp(char* date){
     struct tm time;
@@ -58,6 +76,15 @@ gint dateToTimestamp(char* date){
     return resultado;
 }
 
+void printReply(Comment comment){
+    printf("\n\tReply:\n");
+    printf("\t\tId: %s\n", comment->id->str);
+    printf("\t\tUser: %s\n",comment->user->str);
+    printf("\t\tDate: %s\n",comment->date->str);
+    printf("\t\tTimestamp: %d\n", comment->timestamp);
+    printf("\t\tCommentText: %s\n\n\n", comment->commentText->str);
+}
+
 void printComment(Comment comment){
     printf("Comment:\n");
     printf("\tId: %s\n", comment->id->str);
@@ -65,6 +92,13 @@ void printComment(Comment comment){
     printf("\tDate: %s\n",comment->date->str);
     printf("\tTimestamp: %d\n", comment->timestamp);
     printf("\tCommentText: %s\n", comment->commentText->str);
+    printf("\tHas Replies: %d\n", comment->hasReplies);
+    printf("\tNumber Of Replies: %d\n", comment->numberOfReplies);
+    Comment c;
+    for(int i = 0; i < comment->numberOfReplies ; i++){
+        c = g_array_index(comment->replies,Comment,i);
+        printReply(c);
+    }
 }
 
 void printCommentThread(){
