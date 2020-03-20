@@ -42,12 +42,11 @@ permalink\">[0-9 .:]+                           c->date = g_string_new(yytext+11
 datetime=\"[0-9\-T:.]+/[\"\>]                   c->timestamp = dateToTimestamp(yytext+10);
 
 \<p\>                                           BEGIN TEXT; c->commentText = g_string_new("");
-<TEXT>\n[ ]+<\/p>                               BEGIN 0; isReply = TRUE;
-<TEXT>\n<\/p>                                   BEGIN 0; isReply = TRUE;
-<TEXT>\n                                        { }
-<TEXT>\n[ ]+                                    { }
-<TEXT>({letra}|[0-9]).*                         g_string_append(c->commentText,yytext);                                           
-    
+<TEXT>\n+\ *\<\/p>                              BEGIN 0; isReply = TRUE;
+<TEXT>.|\n                                      {}
+<TEXT>\n[ ]+                                    {}                        
+<TEXT>.*/\r                                     g_string_append(c->commentText,yytext); g_string_append(c->commentText,"\\\n");
+
 .|\n                                            {}
 
 %%
@@ -76,37 +75,70 @@ gint dateToTimestamp(char* date){
     return resultado;
 }
 
+
 void printReply(Comment comment){
-    printf("\n\tReply:\n");
-    printf("\t\tId: %s\n", comment->id->str);
-    printf("\t\tUser: %s\n",comment->user->str);
-    printf("\t\tDate: %s\n",comment->date->str);
-    printf("\t\tTimestamp: %d\n", comment->timestamp);
-    printf("\t\tCommentText: %s\n\n\n", comment->commentText->str);
+    printf("\t\t{\n");
+    printf("\t\t  \"id\": \"%s\",\n", comment->id->str);
+    printf("\t\t  \"user\": \"%s\",\n",comment->user->str);
+    printf("\t\t  \"date\": \"%s\",\n",comment->date->str);
+    printf("\t\t  \"timestamp\": %d,\n", comment->timestamp);
+    printf("\t\t  \"commentText\": \"%s\",\n", comment->commentText->str);
+    //printf("\t\t  \"commentText\": \" \",\n");
+    printf("\t\t  \"hasReplies\": ");
+    if(comment->hasReplies == TRUE){
+        printf("TRUE,\n");
+    } else {
+        printf("FALSE,\n");
+    }
+    printf("\t\t  \"numberOfReplies\": %d \n\n", comment->numberOfReplies);
+    printf("\t\t  \"replies\": [ ]\n");
+    printf("\t\t}");
 }
 
 void printComment(Comment comment){
-    printf("Comment:\n");
-    printf("\tId: %s\n", comment->id->str);
-    printf("\tUser: %s\n",comment->user->str);
-    printf("\tDate: %s\n",comment->date->str);
-    printf("\tTimestamp: %d\n", comment->timestamp);
-    printf("\tCommentText: %s\n", comment->commentText->str);
-    printf("\tHas Replies: %d\n", comment->hasReplies);
-    printf("\tNumber Of Replies: %d\n", comment->numberOfReplies);
-    Comment c;
-    for(int i = 0; i < comment->numberOfReplies ; i++){
-        c = g_array_index(comment->replies,Comment,i);
-        printReply(c);
+    printf("\t{\n");
+    printf("\t  \"id\": \"%s\",\n", comment->id->str);
+    printf("\t  \"user\": \"%s\",\n",comment->user->str);
+    printf("\t  \"date\": \"%s\",\n",comment->date->str);
+    printf("\t  \"timestamp\": %d,\n", comment->timestamp);
+    printf("\t  \"commentText\": \"%s\",\n", comment->commentText->str);
+    printf("\t  \"hasReplies\": ");
+    if(comment->hasReplies == TRUE){
+        printf("TRUE,\n");
+    } else {
+        printf("FALSE,\n");
     }
+    printf("\t  \"numberOfReplies\": %d \n\n", comment->numberOfReplies);
+    printf("\t  \"replies\": ");
+    if(comment->hasReplies == TRUE){
+        Comment c;
+        printf("[\n");
+        for(int i = 0; i < comment->numberOfReplies ; i++){
+            c = g_array_index(comment->replies,Comment,i);
+            printReply(c);
+            if(i != comment->numberOfReplies-1){
+                printf(",\n");
+            }
+        }
+        printf("\n\t]");
+    }else{
+        printf("[ ]\n");
+    }
+    printf("\n\t}");
 }
+
 
 void printCommentThread(){
     Comment c;
+    printf("\"CommentThread:\" : [\n");
     for(gint i = 0 ; i < commentThread->len ; i++){
          c = g_array_index(commentThread,Comment,i);
          printComment(c);
+         if(i != commentThread->len-1){
+            printf(",\n");
+         }
     } 
+    printf("\n]");
 }
 
 int main(int argc, char* argv[]){
@@ -114,6 +146,5 @@ int main(int argc, char* argv[]){
     commentThread = g_array_new(FALSE,FALSE,sizeof(Comment));
     yylex();
     printCommentThread();
-    printf("\n\n\n%d\n\n\n",commentThread->len);
     return 0;
 }
