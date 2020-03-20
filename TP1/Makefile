@@ -7,3 +7,4 @@ TP1: TP1.fl
 
 clean:
 	rm TP1
+	rm TP1.c
