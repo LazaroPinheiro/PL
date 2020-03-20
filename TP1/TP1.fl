@@ -35,17 +35,19 @@ letra           [a-zA-Z\xc0-\xff]
 
 \-t\"\ id=\"[a-z0-9]{6}                         c = g_new(struct comment,1); insertCommentReply(c, isReply); c->hasReplies = FALSE; c->id = g_string_new(yytext+8);
 
-rel=\"nofollow\">[a-zA-Z 0-9.,]+                c->user = g_string_new(yytext+15);
-[ ]+Conta.*                                     c->user = g_string_new(yytext+16);
+rel=\"nofollow\">.*/\ \<\/a\>                   c->user = g_string_new(yytext+15);
+\ +Conta.*                                     c->user = g_string_new(yytext+16);
 
 permalink\">[0-9 .:]+                           c->date = g_string_new(yytext+11);
 datetime=\"[0-9\-T:.]+/[\"\>]                   c->timestamp = dateToTimestamp(yytext+10);
 
-\<p\>                                           BEGIN TEXT; c->commentText = g_string_new("");
-<TEXT>\n+\ *\<\/p>                              BEGIN 0; isReply = TRUE;
+\<p\>\r\n\ *                                    BEGIN TEXT; c->commentText = g_string_new("");
+<TEXT>\n+\ *\<\/p\>                             BEGIN 0; isReply = TRUE;
 <TEXT>.|\n                                      {}
-<TEXT>\n[ ]+                                    {}                        
-<TEXT>.*/\r                                     g_string_append(c->commentText,yytext); g_string_append(c->commentText,"\\\n");
+<TEXT>.*/\r                                     g_string_append(c->commentText,yytext);
+
+
+
 
 .|\n                                            {}
 
