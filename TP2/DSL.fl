@@ -8,23 +8,27 @@
 %x TEXTO CONT TRIPLOS
 
 %%
-                              GString* conteudo;
+                                            GString* conteudo;
 
-===\ \:.+/\n                  {printf("%s\n",yytext+5);}
+===\ \:.+/\n                                {printf("%s\n",yytext+5);}
 
-@tit\:\ .+/\n                 {printf("%s\n",yytext+6); BEGIN TEXTO;}         
+@tit\:\ .+/\n                               {printf("%s\n",yytext+6); BEGIN TEXTO;}         
+                    
+<TEXTO>@triplos\:                           {BEGIN 0;}
+<TEXTO>#\ .+[\n]{2}                         {yytext[strlen(yytext)-2] = '\0'; printf("%s\n",yytext+2); BEGIN CONT; conteudo = g_string_new(NULL);}
+<TEXTO>\n                                   ;
 
-<TEXTO>@triplos\:\n           {BEGIN 0;}
-<TEXTO>#\ .+\n                {yytext[strlen(yytext)-1] = '\0'; printf("%s\n",yytext+2); BEGIN CONT; conteudo = g_string_new(NULL);}
-<TEXTO>\n                     ;
-
-<CONT>.+/\n                   {g_string_append(conteudo,yytext);} 
-<CONT>^\n                     {printf("Paragrafo\n");}
-<CONT>\n/(#|@)                {printf("%s\n", conteudo->str); BEGIN TEXTO;}
-<CONT>\n                      ;
+<CONT>.+/\n                                 {g_string_append(conteudo,yytext);} 
+<CONT>^\n                                   {printf("Paragrafo\n");printf("%s\n", conteudo->str);conteudo = g_string_new(NULL);}
+<CONT>\n/(#|@)                              {printf("%s\n", conteudo->str); BEGIN TEXTO;}
+<CONT>\n                                    {g_string_append(conteudo," ");}
 
 
-.|\n                          ;
+
+
+
+
+.|\n                                        ;
 
 %%
 
