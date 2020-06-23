@@ -1,6 +1,6 @@
 %{
-    #include "y.tab.h"
     void yyerror(char* s);
+    #include<glib.h>
 %}
 
 %option noyywrap yylineno
@@ -10,24 +10,21 @@
 %%
                               GString* conteudo;
 
-===\ \:.+/\n                  {yylval.string = strdup(yytext+5); return CONCEITO;}
+===\ \:.+/\n                  {printf("%s\n",yytext+5);}
 
-@tit\:\ .+/\n                 {yylval.string = strdup(yytext+5); BEGIN TEXTO; return TITULO;}         
+@tit\:\ .+/\n                 {printf("%s\n",yytext+6); BEGIN TEXTO;}         
 
-<TEXTO>/@triplos\:\n          {BEGIN TRIPLOS;}
-<TEXTO>#\ .+/\n               {yylval.string = strdup(yytext+2); BEGIN CONT; conteudo = g_string_new(NULL); return SUBTITULO;}
+<TEXTO>@triplos\:\n           {BEGIN 0;}
+<TEXTO>#\ .+\n                {yytext[strlen(yytext)-1] = '\0'; printf("%s\n",yytext+2); BEGIN CONT; conteudo = g_string_new(NULL);}
+<TEXTO>\n                     ;
 
-<CONT>/#                      {yylval.string = strdup(conteudo->str); BEGIN TEXTO; return CONTEUDO;}
-<CONT>.+/\n                   {g_string_append(conteudo,yytext);}
-<CONT>\n                      {return PARAGRAFO;}
-
-
-
-
+<CONT>.+/\n                   {g_string_append(conteudo,yytext);} 
+<CONT>^\n                     {printf("Paragrafo\n");}
+<CONT>\n/(#|@)                {printf("%s\n", conteudo->str); BEGIN TEXTO;}
+<CONT>\n                      ;
 
 
-
-.|\n                          {}
+.|\n                          ;
 
 %%
 
