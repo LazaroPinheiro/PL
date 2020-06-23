@@ -792,7 +792,7 @@ case 1:
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
 #line 13 "DSL.fl"
-{printf("%s\n",yytext+5);}
+{printf("%s\n",yytext+5);} //Conceito
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
@@ -801,7 +801,7 @@ case 2:
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
 #line 15 "DSL.fl"
-{printf("%s\n",yytext+6); BEGIN TEXTO;}         
+{printf("%s\n",yytext+6); BEGIN TEXTO;} //Título       
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
@@ -812,7 +812,7 @@ case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
 #line 18 "DSL.fl"
-{yytext[strlen(yytext)-2] = '\0'; printf("%s\n",yytext+2); BEGIN CONT; conteudo = g_string_new(NULL);}
+{yytext[strlen(yytext)-2] = '\0'; printf("%s\n",yytext+2); BEGIN CONT; conteudo = g_string_new(NULL);} //Subtitulo
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
