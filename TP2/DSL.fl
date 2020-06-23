@@ -1,0 +1,37 @@
+%{
+    #include "y.tab.h"
+    void yyerror(char* s);
+%}
+
+%option noyywrap yylineno
+
+%x TEXTO CONT TRIPLOS
+
+%%
+                              GString* conteudo;
+
+===\ \:.+/\n                  {yylval.string = strdup(yytext+5); return CONCEITO;}
+
+@tit\:\ .+/\n                 {yylval.string = strdup(yytext+5); BEGIN TEXTO; return TITULO;}         
+
+<TEXTO>/@triplos\:\n          {BEGIN TRIPLOS;}
+<TEXTO>#\ .+/\n               {yylval.string = strdup(yytext+2); BEGIN CONT; conteudo = g_string_new(NULL); return SUBTITULO;}
+
+<CONT>/#                      {yylval.string = strdup(conteudo->str); BEGIN TEXTO; return CONTEUDO;}
+<CONT>.+/\n                   {g_string_append(conteudo,yytext);}
+<CONT>\n                      {return PARAGRAFO;}
+
+
+
+
+
+
+
+.|\n                          {}
+
+%%
+
+int main(){
+    yylex();
+    return 0;
+}
