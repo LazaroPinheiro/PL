@@ -18,6 +18,7 @@
 <TEXTO>#\ .+[\n]{2}                         { yytext[strlen(yytext)-2] = '\0'; printf("%s\n",yytext+2); BEGIN CONT; conteudo = g_string_new(NULL); } // Subtítulo
 <TEXTO>\n                                   ;
 
+<<<<<<< Updated upstream
 <CONT>.+/\n                                 { g_string_append(conteudo,yytext); } 
 <CONT>^\n                                   { printf("Paragrafo\n");printf("%s\n", conteudo->str);conteudo = g_string_new(NULL); }
 <CONT>\n/(#|@)                              { printf("%s\n", conteudo->str); BEGIN TEXTO; }
@@ -29,13 +30,32 @@
 
 <REL>a/\                                    { BEGIN OBJ; printf("RELACAO: %s\n", yytext); }
 <REL>\:[^ ]*/\                              { BEGIN OBJ; printf("RELACAO: %s\n", yytext); }
+=======
+<CONT>.+/\n                                 { g_string_append(conteudo, yytext); } 
+<CONT>^\n                                   { if (strcmp(conteudo->str, "") == 0){ yylval.string = strdup(conteudo->str); conteudo = g_string_new(NULL); return PARAGRAFO; } }
+<CONT>\n/(#|@)                              { BEGIN TEXTO; yylval.string = strdup(conteudo->str); return CONTEUDO; }
+<CONT>\n                                    { g_string_append(conteudo," "); }
+
+<SUJ>\n/===\ \:                             { BEGIN 0; }
+<SUJ>\:.+/\n                                { BEGIN REL; yylval.string = strdup(yytext+1); return SUJEITO; }
+<SUJ>\n                                     ;
+
+<REL>a/\                                    { BEGIN OBJ; yylval.string = strdup(yytext); return RELACAO; }
+<REL>\:[^ ]*/\                              { BEGIN OBJ; yylval.string = strdup(yytext+1); return RELACAO; }
+>>>>>>> Stashed changes
 <REL>[\n;, ]                                ;
 
 <OBJ>\.                                     { BEGIN SUJ; }
 <OBJ>;                                      { BEGIN REL; }
+<<<<<<< Updated upstream
 <OBJ>\:[^ ,;.]*/(\ |,|;|\.)                 { printf("OBJECTO: %s\n", yytext); }
 <OBJ>\".*/\"                                { printf("OBJECTO: %s\n", yytext+1); }
 <OBJ>[\" ,\n]                               ;
+=======
+<OBJ>\:[^ ,;.]*/(\ |,|;|\.)                 { yylval.string = strdup(yytext+1); return OBJECTO; }
+<OBJ>\".*/\"                                { yylval.string = strdup(yytext+1); return OBJECTO; }
+<OBJ>[ ,\n\"]                               ;
+>>>>>>> Stashed changes
 
 .|\n                                        ;
 
