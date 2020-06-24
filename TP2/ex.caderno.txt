@@ -1,48 +1,252 @@
-=== :OnorioL
-@tit: Onório de Lima
+=== :Salazar
+@tit: António de Oliveira Salazar
 
-# Infância no Brasil   
+# O aparelho repressivo
 
-Onório de Lima viveu ...
+Os presos políticos são encarcerados em centros de detenção , como a prisão de Caxias,
+perto de Lisboa, ou o campo do Tarrafal, nas ilhas de Cabo Verde, e torturados.
+A polícia política usava informadores civis, na linguagem popular "os bufos",
+que se encontravam em praticamente todos os sectores da sociedade.
 
-# Percurso cultural no Porto
+Em 1933, montou uma polícia política, a PVDE (Polícia de Vigilância e Defesa do Estado),
+renomeada em 1945 como PIDE (Polícia Internacional e Defesa do Estado) ;
+depois de sua morte, foi chamada  Direção-Geral de Segurança  (DGS).
+O seu papel é vigiar  a população, expulsar os opositores do regime na  metrópole e nas colônias e aplicar a censura.
+Tinha também o controle de estrangeiros e fronteiras.
 
-Entre 1873 e 1930 Onório de Lima viveu no Porto,
-Cedofeita e foi...
+O historiador Douglas L. Wheeler contraria a versão corrente de que a polícia política portuguesa teria sido inspirada e até instruída pela Gestapo alemã.
+Em 1983, queixando-se antes de tudo da escassez de fontes existentes, da desordem dos ficheiros, e também da dificuldade em lhes aceder,
+conclui que a formação da polícia secreta foi antes influenciada primeiro pelo MI5 britânico.
+Só durante a Guerra Civil Espanhola alguns oficiais da Gestapo teriam começado a prestar assistência à secreta portuguesa.
 
-...parágrafos separados por linhas em branco
+Na sede da PIDE ,em Lisboa, um edifício de cinco andares, na Rua António Maria Cardoso, estava escrita a frase de Salazar:
+«Havemos de chorar os mortos, se os vivos o não merecerem».
+Até 1971, quando os interrogatórios passaram a ser feitos no reduto sul de Caxias,
+foi ali que muitos opositores do regime foram sujeitos a espancamentos e tortura.
+Era uma zona citadina, no meio da Baixa lisboetaː os gritos ouviam-se na rua.
+Em 1 de Agosto de 1958, a própria embaixatriz do Brasil (esposa de Álvaro Lins) assiste à queda dum detido do terceiro andar da sede da polícia política.
+
+# A Concordata
+
+Em 1911 tinha sido publicada a Lei da Separação do Estado das Igrejas, de Afonso Costa.
+Um documento que o Papa Pio X declarara nulo “como uma lei que despreza a Deus” e que “enxovalha e insulta a majestade do Pontificado Romano,
+o episcopado, o clero e o povo Lusitano e até os católicos todos do universo”.
+Se a religião católica tinha deixado de ser a do Estado, não tinha no entanto deixado de ser a de parte do povo,
+como mostraram fenómenos de religiosidade popular como Fátima, em 1917.
+
+Em 1940, depois de aturadas negociações, Salazar assina a Concordata entre a Santa Sé e Portugal,
+o culminar da aproximação entre Portugal e a Santa Sé, que tinha começado logo após o fim da I República.
+A questão da indemnização da Igreja Católica pela nacionalização dos seus bens durante a Primeira República foi reivindicada pela Santa Sé mas Salazar rejeita porém tal hipótese e adopta um regime de separação de poderes entre o Estado e a Igreja.
+Salazar impôs os seus pontos de vista, fazendo um acordo cujas benesses para a Igreja ficaram muito aquém das vantagens oferecidas noutras concordatas,
+como a italiana ou a espanhola, conferindo-lhe uma plasticidade que permitiu a sua persistência no ordenamento jurídico português até 2004 tendo inclusivamente sobrevivido ao 25 de Abri de 1974.
+No período revolucionário sofreu apenas uma alteração, em 1975, ao artigo 24º,
+remetendo a indissolubilidade do casamento católico para a esfera do direito canónico e da consciência dos cônjuges,
+acabando assim com a proibição do divórcio civil para os casamentos católicos.
+
+# Salazar na Literatura Portuguesa
+
+Segundo o historiador António José Saraiva, que foi opositor do regime, exilado político e militante do Partido Comunista,
+quem lê os "Discursos e Notas" de Salazar “fica subjugado pela limpidez e concisão do estilo, a mais perfeita e cativante prosa doutrinária que existe em língua portuguesa,
+atravessada por um ritmo afectivo poderoso”. Segundo este autor da "História da Literatura Portuguesa" (obra conjunta com Óscar Lopes) a prosa de Salazar merece um lugar de relevo na História da Literatura Portuguesa (e só considerações políticas a arredaram do lugar que lhe compete).
+Salazar é detentor de “uma prosa que guarda a lucidez da grande prosa do século XVII, e de onde é banida toda a nebulosidade,
+toda a distracção, toda a frouxidão, tudo o que frequentemente torna obscura ou despropositadamente ofuscante a prosa dos nossos doutrinadores."
 
 @triplos:
-:OnórioL 
+:Salazar 
    a     :Person  ,
-        :Mecenas_cultural  ;
-   :Name  "Onório de Lima" ; 
-   :birth_place :Brasil ;
-   :viveu_em :Porto, 
-           :Gerês ;
-   :img "OnórioDL1.jpg" .
+        :Ditador  ,
+        :Político ,
+        "Professor Universitário";
+   :Name  "António de Oliveira Salazar" ; 
+   :birth_place  "Santa Comba Dão" ;
+   :nationality :Português ;
+   :viveu_em :Coimbra, 
+           :Lisboa,
+           "Santa Comba Dão" ;
+   :partidos_políticos  "Centro Católico Português",
+                        "União Nacional" ;
+   :religião  "Catolicismo Romano";
+   :img "Salazar.jpg" .
 
-:OnórioL 
-   :pai_de :OndinaL .
+:PIDE 
+   :fundador :Salazar .
 
-:CarolinaDA 
-   :filho_de :OntinaL;
-   :name "Carolina Dias Antunes";
-   :casou_com :JorgeDomingos.
+:MariaSalazar
+   :mãe_de :Salazar ;
+   :name "Maria do Resgate Salazar" ;
+   :casou_com :AntonioOliveira.
 
-=== :JorgeDomingos
-@tit: António Jorge Domingos
+:AntonioOliveira
+   :pai_de :Salazar ;
+   :name "António de Oliveira" ;
+   :casou_com :MariaSalazar.
 
-# Histórias em Angola
+=== :Hitler
+@tit: Adolf Hitler
 
-O Dr. António Jorge Domingos nasceu em Angola
-e ficou ......
+# Vida pessoal
+
+Hitler queria passar a imagem de um homem celibatário que não tinha vida doméstica, dedicando-se inteiramente a sua missão política e a sua nação.
+Ele conheceu sua principal amante, Eva Braun, em 1929, e se casou com ela em abril de 1945. Em setembro de 1931, sua meia-sobrinha,
+Geli Raubal, cometeu suicídio com a arma do próprio Hitler no apartamento dele em Munique.
+Entre as razões que levaram Geli ao suicídio seria um suposto interesse romântico de Hitler nela e sua morte seria resultado
+de uma obsessão dele por ela. Paula Hitler, a irmã do Führer e seu último parente vivo de sua família imediata, faleceu em 1960.
+
+# Visões religiosas
+
+Hitler nasceu de uma mãe que era católica praticante e um pai anticlerical; após deixar a sua casa, Hitler praticamente nunca mais
+frequentou missas ou recebeu sacramentos. Albert Speer afirmou que Hitler fez pronunciamentos duros contra a Igreja para seus associados
+políticos e apesar de não ter abandonado a fé, nunca ligou muito para ela. Hitler dizia que se os fiéis abandonassem a igreja eles
+iriam se virar ao misticismo, o que ele considerava um retrocesso. De acordo com Speer, o Führer acreditava que a religião japonesa
+ou o islamismo seriam religiões melhores para os alemães do que o cristianismo, com sua "mansidão e flacidez".
+
+O historiador John S. Conway afirmou que Hitler se opunha fundamentalmente as igrejas cristãs. De acordo com Alan Bullock,
+Hitler não acreditava em Deus, era anticlerical e não acreditava muito na 'ética cristã' por que ela ia de encontro a sua crença de
+"sobrevivência do mais apto". Ele, contudo, favorecia alguns pontos de vista do protestantismo e adotou elementos da hierarquia
+organizacional da Igreja Católica, a liturgia e fraseologia nas suas políticas.
+
+Hitler via a igreja como uma importante influência política conservadora na sociedade, e adotou uma estratégia para lidar com eles que
+"se encaixava com os seus propósitos políticos imediatos". Em público, Hitler exaltava a herança cristã alemã e a sua cultura, professando a sua
+crença no "Jesus Ariano", que havia lutado contra os judeus. Muitas das suas retóricas pró-cristãs não eram as mesmas que ele fazia em privado,
+descrevendo o cristianismo como o "absurdo" e fundado em mentiras.
+
+De acordo com um relatório da Agência de Serviços Secretos dos Estados Unidos, intitulado "The Nazi Master Plan" ("O Plano mestre Nazista"),
+Hitler planeava destruir a influência da igreja cristã dentro do Reich. O seu plano final seria a eliminação total do cristianismo.
+De acordo com Bullock, Hitler iria executar tal plano após a conclusão da guerra na Europa.
+
+Speer escreveu que Hitler também tinha visões negativas a respeito das tendências ao misticismo de Heinrich Himmler e Alfred Rosenberg.
+O führer não gostava da tentativa de Himmler de tentar mitificar a SS.
+Hitler era mais pragmático e as suas ambições centravam-se em preocupações mais práticas.
+
+Pessoas próximas a Hitler afirmavam que ele era teísta. Frequentemente, ele mencionava que a "Providência" o protegia
+e dizia estar em uma missão divina na terra para eliminar os judeus e reerguer o povo alemão.
+
+# Culto à personalidade
+
+Sob seu governo, Hitler foi objeto de um extenso culto de personalidade. Seus retratos foram pendurados em locais públicos em
+toda a Alemanha e a saudação Heil Hitler ("salve Hitler") tornou-se obrigatória mesmo entre civis.
+Este culto era intrinsecamente ligado ao modelo ditatorial adotado pela Alemanha, com doutrinadores nazistas justificando-o
+com base no chamado princípio da liderança (em alemão: Führerprinzip), segundo o qual toda a autoridade era investida em Hitler, que
+estava necessariamente certo e deveria ser inquestionavelmente obedecido tanto pela hierarquia nazista como pelo povo alemão, em
+lealdade deontológica e cega.
+
+Para assegurar a máxima difusão de seus ideais, foi instituído logo após a tomada do poder pelos nazistas em 1933 um Ministério
+da Propaganda, que até 1945 manteve total controle sobre as produções culturais no país. Presidido por Josef Goebbels,
+o Ministério teve Hitler como um dos principais focos de propaganda, glorificando-o como um líder heroico e infalível e
+contribuindo fortemente para seu culto de personalidade.Hitler apareceu ele mesmo em muitos dos filmes, performando de forma
+cuidadosamente coreografada. As Reuniões de Nuremberg eram um dos principais eventos para promoção da imagem de Hitler, e
+foram eles mesmos matéria do filme Der Sieg des Glaubens.[424] O uso de propaganda hitlerista era tão intenso que chegou mesmo a mudar
+o sentido da palavra em idiomas como o inglês, atribuindo-lhe uma conotação política negativa.
 
 @triplos:
-:JorgeDomingos 
-    a :Person,
-      :Etnólogo;
-    :name  "António Jorge Domingos";
-    :pai_de  :FranciscoSM .
+:Hitler 
+   a     :Person  ,
+        :Ditador  ,
+        :Político ,
+        :Führer,
+        :Militar ,
+        :Escritor ,
+        :Artista;
+   :Name  "Adolf Hitler" ; 
+   :birth_place  "Braunau am Inn" ;
+   :nationality :Austríaco ,
+               :Alemão;
+   :viveu_em :Berlim, 
+           "Braunau am Inn" ;
+   :partidos_políticos  "Partido Alemão dos Trabalhadores",
+                        "Partido Nazi" ;
+   :religião  "Visão religiosa de Adolf Hitler";
+   :img "Hitler.jpg" .
 
+:EvaBraun 
+   :casada_com :Hitler,
+   :name "Eva Braun" .
 
+:KlaraHitler
+   :mãe_de :Hitler ;
+   :name "Klara Hitler" ;
+   :casou_com :AloisHitler.
+
+:AloisHitler
+   :pai_de :Hitler ;
+   :name "Alois Hitler" ;
+   :casou_com :KlaraHitler.
+
+=== :Jong-un
+@tit: Kim Jong-un
+
+# Personalidade
+
+Kenji Fujimoto, um chef japonês que foi o cozinheiro pessoal de Kim Jong-il, descreveu Kim Jong-un como
+"a cara do pai, uma imagem cuspida dele em termos de rosto, forma do corpo e personalidade". Ele disse que Jong-un era um grande
+fã dos Beatles e do Jean-Claude Van Damme. É dito que Kim é fã do Chicago Bulls e do Los Angeles Lakers também.
+
+Em 2012, o Business Insider informou que houve "sinais de um aumento de artigos de luxo...
+saindo da Coreia do Norte desde que Kim Jong-un assumiu" e que sua "esposa Ri Sol-Ju foi fotografada segurando o que parecia ser uma
+bolsa Dior cara, no valor de quase 1 594 dólares - um salário médio de um ano na Coreia do Norte". Segundo fontes diplomáticas,
+"Kim Jong-un gosta de beber e festejar a noite toda, como seu pai fazia, e encomendou o equipamento de uma sauna importada para ajudá-lo a passar a
+ressaca e o cansaço".
+
+Em 26 de fevereiro de 2013, Kim Jong-un conheceu Dennis Rodman, que levou muitos repórteres a especularem que Rodman foi o primeiro
+americano que Kim conheceu. Durante a viagem de Rodman, o correspondente da revista Vice Ryan Duffy disse que "o líder era
+'socialmente desajeitado' e não fazia contato visual ao apertar as mãos".
+
+Segundo Cheong Seong-chang, do Instituto Sejong, Kim Jong-un tem um interesse visível maior no bem estar de seu povo e se envolve em uma
+interação maior com eles do que seu pai envolvia.
+
+Os sul-coreanos que viram Kim na cúpula em abril de 2018 o descreveram como direto, bem-humorado e atencioso. Depois de conhecê-lo,
+Donald Trump disse: "Eu aprendi que ele era um homem talentoso. Eu também aprendi que ele ama muito seu país".
+Ele acrescentou que Kim tinha uma "grande personalidade" e era "muito inteligente".
+
+# Saúde
+
+Em 2009, relatórios sugeriram que Kim Jong-un era diabético e sofria de hipertensão. Ele também é conhecido por fumar cigarros. Kim Jong-un
+não apareceu em público por seis semanas em setembro e outubro de 2014. A mídia estatal informou que ele estava sofrendo de uma "condição
+física desconfortável". Anteriormente, ele tinha sido visto mancando. Quando ele reapareceu, ele estava usando uma bengala.
+Em setembro de 2015 o governo sul-coreano comentou que Kim parecia ter ganho 30 quilogramas de gordura corporal nos últimos cinco anos,
+atingindo um peso corporal total estimado de 130 quilos. Kim também sofre de gota (inflamação nas articulações) e de insônia.
+
+Em 15 de abril de 2020, Kim Jong-Un não participou das homenagens ao seu avô Kim Il-sung, o fundador da Coreia do Norte.
+Sua ausência nas festividades do principal feriado do país gerou suspeitas de que ele poderia estar doente. A 21 de abril,
+a imprensa norte-americana divulgou que o estado de saúde do ditador era grave, após ter passado por uma cirurgia cardíaca. Tal informação,
+contudo, não foi confirmada por autoridades sul-coreanas ou chinesas. A imprensa estatal norte-coreana inicialmente não fez qualquer
+menção ao estado de saúde de seu líder.[78] Contudo, em 2 de maio, após vinte dias fora de vista, Kim Jong-un fez uma aparição pública
+durante a inauguração de uma fábrica de fertilizantes em Pyongyang. Isso corroborou informações que surgiram na imprensa sul-coreana
+de que de fato o ditador norte-coreano estaria relativamente bem de saúde. Os motivos por ter desaparecido por três semanas,
+contudo, não foram divulgados.
+
+# Riqueza
+
+Fontes dizem que Kim tem 17 palácios de luxo na Coreia do Norte, uma frota de 100 carros de luxo, principalmente europeus, um jato
+particular e um iate de 30 metros. Rodman descreveu sua viagem à ilha privada de Kim Jong-un: "É como o Havaí ou Ibiza, mas ele é o
+único que vive lá".
+
+@triplos:
+:Jong-un 
+   a     :Person  ,
+        :Ditador  ,
+        :Político ,
+        "Marechal da República" ,
+        :Opressor;
+   :Name  "Kim Jong-un" ; 
+   :birth_place  :Pyongyang ;
+   :nationality "Norte-Coreano" ;
+   :viveu_em :Genebra ,
+               :Köniz,
+               :Pyongyang;
+   :partidos_políticos  "Partido dos Trabalhadores da Coreia" ;
+   :img "Jong-un.jpg" .
+
+:Sol-ju
+   :casada_com :Jong-un,
+   :name "Ri Sol-ju" .
+
+:Young-hee
+   :mãe_de :Jong-un ;
+   :name "Ko Young-hee" ;
+   :casou_com :AloisHitler.
+
+:Jong-il
+   :pai_de :Jong-un ;
+   :name "Kim Jong-il" ;
+   :casou_com :Young-hee.

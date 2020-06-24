@@ -23,6 +23,7 @@
 <CONT>\n/(#|@)                              { printf("%s\n", conteudo->str); BEGIN TEXTO; }
 <CONT>\n                                    { g_string_append(conteudo," "); }
 
+<SUJ>\n/===\ \:                             { BEGIN 0; }
 <SUJ>\:.+/\n                                { BEGIN REL; printf("SUJEITO: %s\n", yytext); }
 <SUJ>\n                                     ;
 
@@ -30,9 +31,9 @@
 <REL>\:[^ ]*/\                              { BEGIN OBJ; printf("RELACAO: %s\n", yytext); }
 <REL>[\n;, ]                                ;
 
-<OBJ>\.                                     { BEGIN 0; }
+<OBJ>\.                                     { BEGIN SUJ; }
 <OBJ>;                                      { BEGIN REL; }
-<OBJ>\:[^ ,]*/(\ |,)                        { printf("OBJECTO: %s\n", yytext); }
+<OBJ>\:[^ ,;.]*/(\ |,|;|\.)                 { printf("OBJECTO: %s\n", yytext); }
 <OBJ>\".*\"                                 { printf("OBJECTO: %s\n", yytext); }
 <OBJ>[ ,\n]                                 ;
 
