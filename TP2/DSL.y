@@ -1,23 +1,24 @@
 %{
+    #define _GNU_SOURCE
+
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
+    #include <math.h>
+
     int yylex();
     void yyerror(char*);
-    #include<stdio.h>
-    #include<string.h>
-    #include<math.h>
-    #include<stdlib.h>
 %}
 
 %union{
     char* string;
 }
 
-%token CONCEITO TITULO SUBTITULO CONTEUDO PARAGRAFO
-%type <string> CONCEITO TITULO SUBTITULO CONTEUDO
+%token CONCEITO TITULO SUBTITULO CONTEUDO PARAGRAFO SUJEITO RELACAO OBJECTO
+%type <string> CONCEITO TITULO SUBTITULO PARAGRAFO CONTEUDO SUJEITO RELACAO OBJECTO
 
 %%
 
-<<<<<<< Updated upstream
-=======
 caderno : caderno par
         |
         ;
@@ -45,13 +46,14 @@ triplos : triplos SUJEITO relacoes                  { printf("SUJEITO: %s\n", $2
 relacoes : relacoes RELACAO objectos                { printf("RELACAO: %s\n", $2); }
          | RELACAO objectos                         { printf("RELACAO: %s\n", $1); }
          ;
->>>>>>> Stashed changes
 
+objectos : objectos OBJECTO                         { printf("OBJECTO: %s\n", $2); }
+         | OBJECTO                                  { printf("OBJECTO: %s\n", $1); }
+         ;
 
 %%
 
 int main(int argc, char* argv[]){
-	if(argc == 2){yyin = fopen(argv[1],"r");}
     yyparse();
 	return 0;
 }
