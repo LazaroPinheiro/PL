@@ -10,8 +10,8 @@ que se encontravam em praticamente todos os sectores da sociedade.
 
 Em 1933, montou uma polícia política, a PVDE (Polícia de Vigilância e Defesa do Estado),
 renomeada em 1945 como PIDE (Polícia Internacional e Defesa do Estado) ;
-depois de sua morte, foi chamada  Direção-Geral de Segurança  (DGS).
-O seu papel é vigiar  a população, expulsar os opositores do regime na  metrópole e nas colônias e aplicar a censura.
+depois de sua morte, foi chamada Direção-Geral de Segurança (DGS).
+O seu papel é vigiar a população, expulsar os opositores do regime na metrópole e nas colônias e aplicar a censura.
 Tinha também o controle de estrangeiros e fronteiras.
 
 O historiador Douglas L. Wheeler contraria a versão corrente de que a polícia política portuguesa teria sido inspirada e até instruída pela Gestapo alemã.
@@ -244,7 +244,7 @@ particular e um iate de 30 metros. Rodman descreveu sua viagem à ilha privada d
 :Young-hee
    :mãe_de :Jong-un ;
    :name "Ko Young-hee" ;
-   :casou_com :AloisHitler.
+   :casou_com :Jong-il.
 
 :Jong-il
    :pai_de :Jong-un ;
