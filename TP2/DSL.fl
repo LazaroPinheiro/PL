@@ -34,8 +34,8 @@
 <OBJ>\.                                     { BEGIN SUJ; }
 <OBJ>;                                      { BEGIN REL; }
 <OBJ>\:[^ ,;.]*/(\ |,|;|\.)                 { printf("OBJECTO: %s\n", yytext); }
-<OBJ>\".*\"                                 { printf("OBJECTO: %s\n", yytext); }
-<OBJ>[ ,\n]                                 ;
+<OBJ>\".*/\"                                { printf("OBJECTO: %s\n", yytext+1); }
+<OBJ>[\" ,\n]                               ;
 
 .|\n                                        ;
 
