@@ -1,0 +1,30 @@
+%{
+    #include<stdio.h>
+%}
+
+%option yylineno
+
+%x TEXT
+
+%%
+
+\"commentText\":\ \"            BEGIN TEXT; fprintf(yyout,"%s",yytext);
+
+<TEXT>\",\n\t                   BEGIN 0; fprintf(yyout,"%s",yytext);
+
+<TEXT>\"                        fprintf(yyout,"\\%s", yytext);
+.|\n                            fprintf(yyout,"%s",yytext);
+
+%%
+
+int yywrap()
+{
+return 1;
+}
+
+int main(void){
+    yyin=fopen("file1.txt","r");
+    yyout=fopen("file2.json","w");
+    yylex();
+    return 0;
+}

@@ -5,28 +5,36 @@
 
 %option noyywrap yylineno
 
-%x TEXTO CONT TRIPLOS
+%x TEXTO CONT SUJ REL OBJ
 
 %%
                                             GString* conteudo;
 
-===\ \:.+/\n                                {printf("%s\n",yytext+5);} //Conceito
+===\ \:.+/\n                                { printf("%s\n",yytext+5); } // Conceito
 
-@tit\:\ .+/\n                               {printf("%s\n",yytext+6); BEGIN TEXTO;} //Título       
+@tit\:\ .+/\n                               { printf("%s\n",yytext+6); BEGIN TEXTO; } // Título       
                     
-<TEXTO>@triplos\:                           {BEGIN 0;}
-<TEXTO>#\ .+[\n]{2}                         {yytext[strlen(yytext)-2] = '\0'; printf("%s\n",yytext+2); BEGIN CONT; conteudo = g_string_new(NULL);} //Subtitulo
+<TEXTO>@triplos\:                           { BEGIN SUJ; }
+<TEXTO>#\ .+[\n]{2}                         { yytext[strlen(yytext)-2] = '\0'; printf("%s\n",yytext+2); BEGIN CONT; conteudo = g_string_new(NULL); } // Subtítulo
 <TEXTO>\n                                   ;
 
-<CONT>.+/\n                                 {g_string_append(conteudo,yytext);} 
-<CONT>^\n                                   {printf("Paragrafo\n");printf("%s\n", conteudo->str);conteudo = g_string_new(NULL);}
-<CONT>\n/(#|@)                              {printf("%s\n", conteudo->str); BEGIN TEXTO;}
-<CONT>\n                                    {g_string_append(conteudo," ");}
+<CONT>.+/\n                                 { g_string_append(conteudo,yytext); } 
+<CONT>^\n                                   { printf("Paragrafo\n");printf("%s\n", conteudo->str);conteudo = g_string_new(NULL); }
+<CONT>\n/(#|@)                              { printf("%s\n", conteudo->str); BEGIN TEXTO; }
+<CONT>\n                                    { g_string_append(conteudo," "); }
 
+<SUJ>\:.+/\n                                { BEGIN REL; printf("SUJEITO: %s\n", yytext); }
+<SUJ>\n                                     ;
 
+<REL>a/\                                    { BEGIN OBJ; printf("RELACAO: %s\n", yytext); }
+<REL>\:[^ ]*/\                              { BEGIN OBJ; printf("RELACAO: %s\n", yytext); }
+<REL>[\n;, ]                                ;
 
-
-
+<OBJ>\.                                     { BEGIN 0; }
+<OBJ>;                                      { BEGIN REL; }
+<OBJ>\:[^ ,]*/(\ |,)                        { printf("OBJECTO: %s\n", yytext); }
+<OBJ>\".*\"                                 { printf("OBJECTO: %s\n", yytext); }
+<OBJ>[ ,\n]                                 ;
 
 .|\n                                        ;
 
