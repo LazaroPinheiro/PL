@@ -8,6 +8,7 @@
 
     int yylex();
     void yyerror(char*);
+    void generate(char*);
 %}
 
 %union{
@@ -26,7 +27,7 @@ caderno : caderno par
 par : documento triplos
     ;
 
-documento : CONCEITO TITULO topicos                 { printf("CONCEITO: %s\n", $1); printf("TITULO: %s\n", $2); }
+documento : CONCEITO TITULO topicos                 { generate($1); }
           ;
 
 topicos : topicos SUBTITULO texto                   { printf("SUBTITULO: %s\n", $2); }
@@ -53,7 +54,26 @@ objectos : objectos OBJECTO                         { printf("OBJECTO: %s\n", $2
 
 %%
 
+void generate(char* name){
+    if(name){
+        char* command = malloc((32 + strlen(name))*sizeof(char));
+        strcat(command, "cd base;");
+        strcat(command, "mkdir ");
+        strcat(command, name);
+        strcat(command, ";cd ");
+        strcat(command, name);
+        strcat(command, ";touch ");
+        strcat(command, name);
+        strcat(command, ".html");
+        system(command);
+        free(command);
+    }
+}
+
+
 int main(int argc, char* argv[]){
+    system("mkdir base");
+    system("cd base ; touch index.html");
     yyparse();
 	return 0;
 }
