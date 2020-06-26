@@ -61,12 +61,12 @@ objectos : objectos OBJECTO                         { printf("OBJECTO: %s\n", $2
 
 void generateConceito(char* conceito, char* titulo){
     if(conceito && titulo){
-        char* command = malloc((30 + strlen(conceito)*3)*sizeof(char));
-        sprintf(command,"cd base;mkdir %s;cd %s;touch %s.html",conceito, conceito, conceito);
+        char *command, *path;
+        asprintf(&command,"cd base;mkdir %s;cd %s;touch %s.html",conceito, conceito, conceito);
         system(command);
         free(command);
-        char* path = malloc((11 + strlen(conceito)*2)*sizeof(char));
-        sprintf(path,"base/%s/%s.html",conceito, conceito);
+
+        asprintf(&path,"base/%s/%s.html",conceito, conceito);
         FILE* file = fopen(path,"w");
         fprintf(file, "<h1>\t%s</h1>\n<h2>%s</h2>", conceito,titulo);
         fclose(file);
@@ -80,10 +80,10 @@ void writeInIndexHtml(char* path, char* name){
 
     if(path && name){
         
-        char* command = malloc((43 + strlen(name)) * sizeof(char));
-        sprintf(command, "cd base;grep -w -c \"%s\" index.html > output", name);
-        
+        char *command; 
+        asprintf(&command, "cd base;grep -w -c \"%s\" index.html > output", name);
         system(command);
+        free(command);
 
         FILE* f = fopen("base/output", "r");
         char buffer[2];
