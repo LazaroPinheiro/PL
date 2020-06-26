@@ -12,18 +12,18 @@
     int yylex();
     void yyerror(char*);
     void generateConceito(char*, char*);
-    void writeInIndexHtml(char* path, char* name);
+    void addText(char*, char*);
+    void writeInIndexHtml(char*, char*);
 
     char* indexPath = "base/index.html";
-    GString* text;
 %}
 
 %union{
     char* string;
 }
 
-%token CONCEITO TITULO SUBTITULO CONTEUDO PARAGRAFO SUJEITO RELACAO OBJECTO
-%type <string> CONCEITO TITULO SUBTITULO PARAGRAFO CONTEUDO SUJEITO RELACAO OBJECTO topicos
+%token CONCEITO TITULO SUBTITULO CONTEUDO SUJEITO RELACAO OBJECTO
+%type <string> CONCEITO TITULO SUBTITULO CONTEUDO SUJEITO RELACAO OBJECTO topicos texto
 
 %%
 
@@ -34,17 +34,15 @@ caderno : caderno par
 par : documento triplos
     ;
 
-documento : CONCEITO TITULO topicos                 { generateConceito($1, $2); g_string_erase(text, 0, -1); }
+documento : CONCEITO TITULO topicos                 { generateConceito($1, $2); addText($1, $3); }
           ;
 
-topicos : topicos SUBTITULO texto                   { char* aux; asprintf(&aux, "<h3>%s</h3>\n", $2); g_string_append(text,aux); free(aux); }
+topicos : topicos SUBTITULO texto                   { asprintf(&$$, "<h3>%s</h3>\n%s", $2, $3); }
         |                                           {}
         ;
 
-texto : texto CONTEUDO                              //{ printf("%s\n", $2); }
-      | texto PARAGRAFO                             //{ printf("%s\n", $2); printf("Paragrafo\n"); }
+texto : texto CONTEUDO                              { asprintf(&$$, "<p>%s</p>\n", $2); }
       | CONTEUDO                                    //{ printf("%s\n", $1); }
-      | PARAGRAFO                                   //{ printf("%s\n", $1); printf("Paragrafo\n"); }
       ;
 
 triplos : triplos SUJEITO relacoes                  //{ printf("SUJEITO: %s\n", $2); }
@@ -70,13 +68,38 @@ void generateConceito(char* conceito, char* titulo){
 
         asprintf(&path,"base/%s/%s.html",conceito, conceito);
         FILE* file = fopen(path,"w");
-        fprintf(file, "<h1>%s</h1>\n<h2>%s</h2>", conceito,titulo);
+        fprintf(file, "<!DOCTYPE html>\n\t<html lang=\"pt-pt\">\n\t<head>\n\t\t<title>%s</title>\n\t\t<meta charset=\"utf-8\">\n\t</head>\n\t<body>\n",conceito);
+        fprintf(file, "\t\t<div class=\"documento\">\n\t\t\t<h1>%s</h1>\n\t\t\t<h2>%s</h2>", conceito,titulo);
         fclose(file);
         writeInIndexHtml(path+5, conceito);
         free(path);
     }
 }
 
+
+void addText(char* conceito, char* texto){
+    if(conceito && texto){
+        char* path;
+        asprintf(&path,"base/%s/%s.html",conceito, conceito);
+        FILE* file = fopen(path,"a");
+        fprintf(file, "%s", texto);
+        fclose(file);
+        free(path);
+    }
+}
+
+/*
+ *  actions in index.html
+ */
+
+void generateIndexHtml(){
+    system("mkdir base");
+    system("cd base ; touch index.html");
+    FILE* file = fopen(indexPath,"w");
+    fprintf(file, "<!DOCTYPE html>\n\t<html lang=\"pt-pt\">\n\t<head>\n\t\t<title>index</title>\n\t\t<meta charset=\"utf-8\">\n\t</head>\n\t<body>\n");
+    fprintf(file, "\t\t<div class=\"index\">\n\t\t\t<h1>Conceitos</h1>\n\n");
+    fclose(file);
+}
 
 void writeInIndexHtml(char* path, char* name){
 
@@ -94,7 +117,7 @@ void writeInIndexHtml(char* path, char* name){
 
         if(buffer[0] == '0'){
             FILE* file = fopen(indexPath,"a");
-            fprintf(file, "<a href='%s'><li>%s</li></a>\n", path, name);
+            fprintf(file, "\t\t\t<a href='%s'><li>%s</li></a>\n", path, name);
             fclose(file);
         }
 
@@ -102,15 +125,17 @@ void writeInIndexHtml(char* path, char* name){
     }
 }
 
+void finalizeIndexHtml(){
+    FILE* file = fopen(indexPath,"a");
+    fprintf(file, "\t\t</div>\n\t</body>\n</html>");
+    fclose(file);
+}
+
 
 int main(int argc, char* argv[]){
-    text = g_string_new(NULL);
-    system("mkdir base");
-    system("cd base ; touch index.html");
-    FILE* file = fopen(indexPath,"w");
-    fprintf(file, "<h1>Conceitos</h1>\n\n");
-    fclose(file);
+    generateIndexHtml();
     yyparse();
+    finalizeIndexHtml();
 	return 0;
 }
 

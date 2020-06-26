@@ -20,7 +20,7 @@
 <TEXTO>\n                                   ;
 
 <CONT>.+/\n                                 { g_string_append(conteudo, yytext); } 
-<CONT>^\n                                   { yylval.string = strdup(conteudo->str); g_string_erase(conteudo, 0, -1); return PARAGRAFO; }
+<CONT>^\n                                   { yylval.string = strdup(conteudo->str); g_string_erase(conteudo, 0, -1); return CONTEUDO; }
 <CONT>\n/(#|@)                              { BEGIN TEXTO; yylval.string = strdup(conteudo->str); g_string_erase(conteudo, 0, -1); return CONTEUDO; }
 <CONT>\n                                    { g_string_append(conteudo," "); }
 
