@@ -68,9 +68,9 @@ void generateConceito(char* conceito, char* titulo){
         char* path = malloc((11 + strlen(conceito)*2)*sizeof(char));
         sprintf(path,"base/%s/%s.html",conceito, conceito);
         FILE* file = fopen(path,"w");
-        fprintf(file, "<h1>%s</h1>\n<h2>%s</h2>", conceito,titulo);
+        fprintf(file, "<h1>\t%s</h1>\n<h2>%s</h2>", conceito,titulo);
         fclose(file);
-        writeInIndexHtml(path, conceito);
+        writeInIndexHtml(path+5, conceito);
         free(path);
     }
 }
@@ -92,7 +92,7 @@ void writeInIndexHtml(char* path, char* name){
 
         if(buffer[0] == '0'){
             FILE* file = fopen(indexPath,"a");
-            fprintf(file, "<a href='%s'><li>%s</li></a>", path, name);
+            fprintf(file, "<a href='%s'><li>%s</li></a>\n", path, name);
             fclose(file);
         }
 
@@ -104,6 +104,9 @@ void writeInIndexHtml(char* path, char* name){
 int main(int argc, char* argv[]){
     system("mkdir base");
     system("cd base ; touch index.html");
+    FILE* file = fopen(indexPath,"w");
+    fprintf(file, "<h1>Conceitos</h1>\n\n");
+    fclose(file);
     yyparse();
 	return 0;
 }
