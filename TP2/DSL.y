@@ -5,10 +5,15 @@
     #include <stdlib.h>
     #include <string.h>
     #include <math.h>
+    #include <unistd.h>
+    #include <fcntl.h>
 
     int yylex();
     void yyerror(char*);
-    void generate(char*);
+    void generateConceito(char*, char*);
+    void writeInIndexHtml(char* path, char* name);
+
+    char* indexPath = "base/index.html";
 %}
 
 %union{
@@ -27,7 +32,7 @@ caderno : caderno par
 par : documento triplos
     ;
 
-documento : CONCEITO TITULO topicos                 { generate($1); }
+documento : CONCEITO TITULO topicos                 { generateConceito($1, $2); }
           ;
 
 topicos : topicos SUBTITULO texto                   { printf("SUBTITULO: %s\n", $2); }
@@ -54,19 +59,44 @@ objectos : objectos OBJECTO                         { printf("OBJECTO: %s\n", $2
 
 %%
 
-void generate(char* name){
-    if(name){
-        char* command = malloc((32 + strlen(name))*sizeof(char));
-        strcat(command, "cd base;");
-        strcat(command, "mkdir ");
-        strcat(command, name);
-        strcat(command, ";cd ");
-        strcat(command, name);
-        strcat(command, ";touch ");
-        strcat(command, name);
-        strcat(command, ".html");
+void generateConceito(char* conceito, char* titulo){
+    if(conceito && titulo){
+        char* command = malloc((30 + strlen(conceito)*3)*sizeof(char));
+        sprintf(command,"cd base;mkdir %s;cd %s;touch %s.html",conceito, conceito, conceito);
         system(command);
         free(command);
+        char* path = malloc((11 + strlen(conceito)*2)*sizeof(char));
+        sprintf(path,"base/%s/%s.html",conceito, conceito);
+        FILE* file = fopen(path,"w");
+        fprintf(file, "<h1>%s</h1>\n<h2>%s</h2>", conceito,titulo);
+        fclose(file);
+        writeInIndexHtml(path, conceito);
+        free(path);
+    }
+}
+
+
+void writeInIndexHtml(char* path, char* name){
+
+    if(path && name){
+        
+        char* command = malloc((43 + strlen(name)) * sizeof(char));
+        sprintf(command, "cd base;grep -w -c \"%s\" index.html > output", name);
+        
+        system(command);
+
+        FILE* f = fopen("base/output", "r");
+        char buffer[2];
+
+        fgets(buffer, sizeof(buffer), f);
+
+        if(buffer[0] == '0'){
+            FILE* file = fopen(indexPath,"a");
+            fprintf(file, "<a href='%s'><li>%s</li></a>", path, name);
+            fclose(file);
+        }
+
+        system("cd base; rm -f output");
     }
 }
 
