@@ -37,24 +37,24 @@ par : documento triplos
 documento : CONCEITO TITULO topicos                 { generateConceito($1, $2); addText($1, $3); }
           ;
 
-topicos : topicos SUBTITULO texto                   { asprintf(&$$,"%s<h3>%s</h3>\n%s", $1, $2,$3); }
+topicos : topicos SUBTITULO texto                   { asprintf(&$$,"%s\t\t\t\t<h3>%s</h3>\n%s", $1, $2,$3); }
         |                                           { asprintf(&$$,"");}
         ;
 
-texto : texto CONTEUDO                              { asprintf(&$$,"%s<p>%s</p>\n", $1, $2);}
+texto : texto CONTEUDO                              { asprintf(&$$,"%s\t\t\t\t<p>%s</p>\n\n", $1, $2);}
       |                                             { asprintf(&$$,"");}
       ;
 
-triplos : triplos SUJEITO relacoes                  //{ printf("SUJEITO: %s\n", $2); }
+triplos : triplos SUJEITO relacoes                  {  }
         |
         ;
 
-relacoes : relacoes RELACAO objectos                //{ printf("RELACAO: %s\n", $2); }
-         | RELACAO objectos                         //{ printf("RELACAO: %s\n", $1); }
+relacoes : relacoes RELACAO objectos                {  }
+         |                                          {  }
          ;
 
-objectos : objectos OBJECTO                         //{ printf("OBJECTO: %s\n", $2); }
-         | OBJECTO                                  //{ printf("OBJECTO: %s\n", $1); }
+objectos : objectos OBJECTO                         {  }
+         |                                          {  }
          ;
 
 %%
@@ -68,8 +68,7 @@ void generateConceito(char* conceito, char* titulo){
 
         asprintf(&path,"base/%s/%s.html",conceito, conceito);
         FILE* file = fopen(path,"w");
-        fprintf(file, "<!DOCTYPE html>\n\t<html lang=\"pt-pt\">\n\t<head>\n\t\t<title>%s</title>\n\t\t<meta charset=\"utf-8\">\n\t</head>\n\t<body>\n",conceito);
-        fprintf(file, "\t\t<div class=\"documento\">\n\t\t\t<h1>%s</h1>\n\t\t\t<h2>%s</h2>", conceito,titulo);
+        fprintf(file, "<!DOCTYPE html>\n\t<html lang=\"pt-pt\">\n\t<head>\n\t\t<title>%s</title>\n\t\t<meta charset=\"utf-8\">\n\t</head>\n\t<body>\n\t\t<div class=\"documento\">\n\t\t\t<h1>%s</h1>\n\t\t\t<h2>%s</h2>\n", conceito, conceito,titulo);
         fclose(file);
         writeInIndexHtml(path+5, conceito);
         free(path);
@@ -82,7 +81,7 @@ void addText(char* conceito, char* texto){
         char* path;
         asprintf(&path,"base/%s/%s.html",conceito, conceito);
         FILE* file = fopen(path,"a");
-        fprintf(file, "%s", texto);
+        fprintf(file, "\t\t\t<div class=\"topicos\">\n%s\t\t\t</div>\n\t\t</div>\n", texto);
         fclose(file);
         free(path);
     }
@@ -93,11 +92,9 @@ void addText(char* conceito, char* texto){
  */
 
 void generateIndexHtml(){
-    system("mkdir base");
-    system("cd base ; touch index.html");
+    system("mkdir base ; cd base ; touch index.html");
     FILE* file = fopen(indexPath,"w");
-    fprintf(file, "<!DOCTYPE html>\n\t<html lang=\"pt-pt\">\n\t<head>\n\t\t<title>index</title>\n\t\t<meta charset=\"utf-8\">\n\t</head>\n\t<body>\n");
-    fprintf(file, "\t\t<div class=\"index\">\n\t\t\t<h1>Conceitos</h1>\n\n");
+    fprintf(file, "<!DOCTYPE html>\n\t<html lang=\"pt-pt\">\n\t<head>\n\t\t<title>index</title>\n\t\t<meta charset=\"utf-8\">\n\t</head>\n\t<body>\n\t\t<div class=\"index\">\n\t\t\t<h1>Conceitos</h1>\n");
     fclose(file);
 }
 
