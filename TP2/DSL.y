@@ -16,8 +16,6 @@
     void writeInIndexHtml(char*, char*);
 
     char* indexPath = "base/index.html";
-    GString* buffer;
-    GString* arroz;
 %}
 
 %union{
@@ -135,8 +133,6 @@ void finalizeIndexHtml(){
 
 
 int main(int argc, char* argv[]){
-    arroz = g_string_new(NULL); 
-    buffer = g_string_new(NULL); 
     generateIndexHtml();
     yyparse();
     finalizeIndexHtml();
