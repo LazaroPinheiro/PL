@@ -11,4 +11,4 @@ clean:
 	rm -f DSL
 	rm -f *.c
 	rm -f *.h
-	rm -r base
+	if [ -a base ]; then rm -r base; fi;
