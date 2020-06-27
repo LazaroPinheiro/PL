@@ -16,6 +16,8 @@
     void writeInIndexHtml(char*, char*);
 
     char* indexPath = "base/index.html";
+    GString* buffer;
+    GString* arroz;
 %}
 
 %union{
@@ -37,12 +39,12 @@ par : documento triplos
 documento : CONCEITO TITULO topicos                 { generateConceito($1, $2); addText($1, $3); }
           ;
 
-topicos : topicos SUBTITULO texto                   { asprintf(&$$, "<h3>%s</h3>\n%s", $2, $3); }
-        |                                           {}
+topicos : topicos SUBTITULO texto                   { asprintf(&$$,"%s<h3>%s</h3>\n%s", $1, $2,$3); }
+        |                                           { asprintf(&$$,"");}
         ;
 
-texto : texto CONTEUDO                              { asprintf(&$$, "<p>%s</p>\n", $2); }
-      | CONTEUDO                                    //{ printf("%s\n", $1); }
+texto : texto CONTEUDO                              { asprintf(&$$,"%s<p>%s</p>\n", $1, $2);}
+      |                                             { asprintf(&$$,"");}
       ;
 
 triplos : triplos SUJEITO relacoes                  //{ printf("SUJEITO: %s\n", $2); }
@@ -133,6 +135,8 @@ void finalizeIndexHtml(){
 
 
 int main(int argc, char* argv[]){
+    arroz = g_string_new(NULL); 
+    buffer = g_string_new(NULL); 
     generateIndexHtml();
     yyparse();
     finalizeIndexHtml();
