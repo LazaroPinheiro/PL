@@ -88,7 +88,7 @@ void fileGenerator(char* name, int isConcept){
             free(command);
 
             FILE* file = fopen(path,"w");
-            fprintf(file, "<!DOCTYPE html>\n\t<html lang=\"pt-pt\">\n\t<head>\n\t\t<title>%s</title>\n\t\t<meta charset=\"utf-8\">\n\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\t\t<link rel=\"stylesheet\" href=\"https://www.w3schools.com/w3css/4/w3.css\">\n\t\t<style>.borderexample {border-style:solid;border-color:#063c79;padding: 15px;}\n\n\t\t\tdiv.cabecalho {\n\t\t\t\ttext-align: center;\n\t\t\t}\n\t\t</style>\n\t</head>\n\t<body>\n\t\t<div class=\"w3-bar w3-black\"><a href=\"../../%s\" class=\"w3-bar-item w3-button\">Home</a></div>\n\t\t<div class=\"cabecalho\">\n\t\t\t<h1>%s</h1>\n\t\t</div>\n\n\t\t<div class=\"documento\">", name, indexPath, name);
+            fprintf(file, "<!DOCTYPE html>\n\t<html lang=\"pt-pt\">\n\t<head>\n\t\t<title>%s</title>\n\t\t<meta charset=\"utf-8\">\n\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\t\t<link rel=\"stylesheet\" href=\"https://www.w3schools.com/w3css/4/w3.css\">\n\t\t<style>.borderexample {border-style:solid;border-color:#063c79;padding: 15px;}\n\n\t\t\tdiv.cabecalho {\n\t\t\t\ttext-align: center;\n\t\t\t}\n\n\t\t\t.TextWrap {\n\t\t\t\tfloat: right;\n\t\t\t\tmargin: 30px;\n\t\t\t}\n\t\t</style>\n\t</head>\n\t<body>\n\t\t<div class=\"w3-bar w3-black\"><a href=\"../../%s\" class=\"w3-bar-item w3-button\">Home</a></div>\n\t\t<div class=\"cabecalho\">\n\t\t\t<h1>%s</h1>\n\t\t</div>\n\n\t\t<div class=\"documento\">", name, indexPath, name);
             fclose(file);
         }
 
@@ -156,7 +156,7 @@ void addImages (char* sujeito){
     FILE* file = fopen(path, "a");
 
     for (int i = 0; i < imageCount; i++){
-        fprintf(file, "<img src=\"%s\" width=\"100\" height=\"100\">\n", imgs[i]);
+        fprintf(file, "<img class=\"TextWrap\" src=\"%s\" width=\"100\" height=\"100\">\n", imgs[i]);
     }
 
     fclose(file);
