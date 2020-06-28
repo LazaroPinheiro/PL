@@ -19,14 +19,15 @@
     char* formatName (char*);
 
     char* indexPath = "base/index.html";
+    char* image = "";
 %}
 
 %union{
     char* string;
 }
 
-%token CONCEITO TITULO SUBTITULO CONTEUDO SUJEITO RELACAO OBJECTO
-%type <string> CONCEITO TITULO SUBTITULO CONTEUDO SUJEITO RELACAO OBJECTO topicos texto triplos relacoes objectos documento
+%token CONCEITO TITULO SUBTITULO CONTEUDO SUJEITO RELACAO OBJECTO IMAGEM
+%type <string> CONCEITO TITULO SUBTITULO CONTEUDO SUJEITO RELACAO OBJECTO IMAGEM topicos texto triplos relacoes objectos documento
 
 %%
 
@@ -48,7 +49,7 @@ texto : texto CONTEUDO                              { asprintf(&$$, "%s\t\t\t\t<
       |                                             { asprintf(&$$, "");}
       ;
 
-triplos : triplos SUJEITO relacoes                  { asprintf(&$$, "%s<ul data-role=\"treeview\"><h4><a href=\"../%s/%s.html\"><h4>%s</h4></a></h4><ul>%s</ul></ul>", $1, formatName($2), formatName($2), $2, $3); }
+triplos : triplos SUJEITO relacoes                  { generateTriplo($2); asprintf(&$$, "%s<ul data-role=\"treeview\"><h4><a href=\"../%s/%s.html\"><h4>%s</h4></a></h4><ul>%s</ul></ul>", $1, formatName($2), formatName($2), $2, $3); }
         |                                           { asprintf(&$$, ""); }
         ;
 
@@ -57,19 +58,25 @@ relacoes : relacoes RELACAO objectos                { asprintf(&$$, "%s<ul data-
          ;
 
 objectos : objectos OBJECTO                         { generateTriplo($2); asprintf(&$$, "%s<a href=\"../%s/%s.html\"><p>%s</p></a>\n", $1, formatName($2), formatName($2), $2); }
+         | objectos IMAGEM                          { asprintf(&$$, "%s", $1); printf("%s\n", $2); }
          |                                          { asprintf(&$$, ""); }
          ;
 
 %%
 
 void generateConceito(char* conceito, char* titulo){
-    if(conceito && titulo){
-        char *command, *path;
-        asprintf(&command,"cd base;mkdir %s;cd %s;touch %s.html",conceito, conceito, conceito);
-        system(command);
-        free(command);
 
-        asprintf(&path,"base/%s/%s.html",conceito, conceito);
+    if(conceito && titulo){
+
+        char *command, *path, *folder;
+        asprintf(&path,"base/%s/%s.html", conceito, conceito);
+
+        if (access(path, F_OK) == -1){
+            asprintf(&command,"cd base;mkdir %s;cd %s;touch %s.html",conceito, conceito, conceito);
+            system(command);
+            free(command);
+        }
+
         FILE* file = fopen(path,"w");
         fprintf(file, "<!DOCTYPE html>\n\t<html lang=\"pt-pt\">\n\t<head>\n\t\t<title>%s</title>\n\t\t<meta charset=\"utf-8\">\n\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\t\t<link rel=\"stylesheet\" href=\"https://www.w3schools.com/w3css/4/w3.css\">\n\t\t<style>.borderexample {border-style:solid;border-color:#063c79;padding: 15px;}\n\n\t\t\tdiv.cabecalho {\n\t\t\t\ttext-align: center;\n\t\t\t}\n\t\t</style>\n\t</head>\n\t<body>\n\t\t<div class=\"w3-bar w3-black\"><a href=\"../../%s\" class=\"w3-bar-item w3-button\">Home</a></div>\n\t\t<div class=\"documento\">\n\t\t\t<div class=\"cabecalho\">\n\t\t\t\t<h1>%s</h1>\n\t\t\t\t<h2>%s</h2>\n\t\t\t</div>\n\n", conceito, indexPath, conceito,titulo);
         fclose(file);

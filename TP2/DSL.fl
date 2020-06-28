@@ -6,7 +6,7 @@
 
 %option noyywrap yylineno
 
-%x TEXTO CONT SUJ REL OBJ
+%x TEXTO CONT SUJ REL OBJ IMG
 
 %%
                                             GString* conteudo = g_string_new(NULL); 
@@ -28,6 +28,7 @@
 <SUJ>\:.+/\n                                { BEGIN REL; yylval.string = strdup(yytext+1); return SUJEITO; }
 <SUJ>\n                                     ;
 
+<REL>\:img/\                                { BEGIN IMG; }
 <REL>a/\                                    { BEGIN OBJ; yylval.string = strdup(yytext); return RELACAO; }
 <REL>\:[^ ]*/\                              { BEGIN OBJ; yylval.string = strdup(yytext+1); return RELACAO; }
 <REL>[\n;, ]                                ;
@@ -37,6 +38,10 @@
 <OBJ>\:[^ ,;.]*/(\ |,|;|\.)                 { yylval.string = strdup(yytext+1); return OBJECTO; }
 <OBJ>\".*/\"                                { yylval.string = strdup(yytext+1); return OBJECTO; }
 <OBJ>[ ,\n\"]                               ;
+
+<IMG>\.                                     { BEGIN SUJ; }
+<IMG>\".*/\"                                { yylval.string = strdup(yytext+1); return IMAGEM; }
+<IMG>[ ,\n\"]                               ;
 
 .|\n                                        ;
 
