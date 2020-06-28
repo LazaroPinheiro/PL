@@ -2,6 +2,7 @@
     #define _GNU_SOURCE
     #define FALSE 0
     #define TRUE 1
+    #define NUM_MAX_IMAGES 5
 
     #include <stdio.h>
     #include <stdlib.h>
@@ -26,12 +27,13 @@
 
     typedef struct imagens {
         char* sujeito;
-        char* imgs[5];
+        int numImgs;
+        char* imgs[NUM_MAX_IMAGES];
     } *Imagens;
 
     GArray *buff;
 
-    char* imgs[5];
+    char* imgs[NUM_MAX_IMAGES];
     int imageCount = 0;
 %}
 
@@ -151,18 +153,19 @@ char* formatName (char* name) {
 
 void addImages (char* sujeito){
 
-    char* path;
     if (sujeito[strlen(sujeito)-1] == ' ') sujeito[strlen(sujeito)-1] = '\0';
-    asprintf(&path, "base/%s/%s.html", sujeito, sujeito);
-    FILE* file = fopen(path, "a");
 
-    for (int i = 0; i < imageCount; i++){
-        fprintf(file, "\n\t\t<img class=\"TextWrap\" src=\"%s\" width=\"100\" height=\"100\">\n\n", imgs[i]);
+    if(imageCount > 0){
+        Imagens imagens = (Imagens)malloc(sizeof(struct imagens));
+        asprintf(&imagens->sujeito, "%s", sujeito);
+        imagens->numImgs = imageCount;
+        for (int i = 0; i < imageCount; i++){
+            asprintf(imagens->imgs+i, "\n\t\t\t<img class=\"TextWrap\" src=\"%s\" width=\"100\" height=\"100\">\n\n", imgs[i]);
+        }
+
+        g_array_append_val(buff, imagens);
+        imageCount = 0;
     }
-
-    fclose(file);
-    free(path);
-    imageCount = 0;
 }
 
 void finalizeFiles(){
@@ -174,13 +177,28 @@ void finalizeFiles(){
     FILE* f = fopen("base/output", "r");
     char directory[128];
     char* path;
+    char* name;
+    Imagens imagens;
 
     if(!f){
         perror("Ocorreu um erro!\n");
     }else{
         while (fgets(directory, 128, f)){
-            asprintf(&path, "base/%s/%s.html", strtok (directory, "\n"), strtok (directory, "\n"));
+            name = strtok (directory, "\n");
+            asprintf(&path, "base/%s/%s.html", name, name);
             FILE* fp = fopen(path, "a");
+
+            for(int i = 0 ; i < buff->len ; i++){
+                imagens = g_array_index(buff, Imagens, i);
+                if(strcmp(imagens->sujeito, name) == 0){
+                    fprintf(fp,"\t\t<div class=\"imagens\">\n\t\t\t<div class=\"cabecalho\">\n\t\t\t\t<h2>Imagens</h2>\n\t\t\t</div>\n");
+                    for(int j = 0; j < imagens->numImgs ; j++ ){
+                        fprintf(fp,"%s\n", imagens->imgs[j] );
+                    }
+                    fprintf(fp,"\t\t</div>");
+                }
+            }
+
             fprintf(fp, "\t</body>\n</html>");
             fclose(fp);
             free(path);
