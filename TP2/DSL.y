@@ -60,7 +60,7 @@ topicos : topicos SUBTITULO texto                   { asprintf(&$$, "%s\t\t\t\t<
         |                                           { asprintf(&$$, "");}
         ;
 
-texto : texto CONTEUDO                              { asprintf(&$$, "%s\t\t\t\t<p>%s</p>\n\n", $1, $2);}
+texto : texto CONTEUDO                              { asprintf(&$$, "%s\t\t\t\t<p>%s</p>\n\n", $1, $2); }
       |                                             { asprintf(&$$, "");}
       ;
 
@@ -79,6 +79,7 @@ objectos : objectos OBJECTO                         { generateTriplo($2); asprin
 
 %%
 
+// Gerar o ficheiro HTLM
 void fileGenerator(char* name, int isConcept){
     if(name){
          char *command, *path;
@@ -103,6 +104,7 @@ void fileGenerator(char* name, int isConcept){
     }
 }
 
+// Adicionar texto ao ficheiro HTLM
 void addText(char* conceito, char* subtitulo, char* texto){
     if(conceito && subtitulo && texto){
         char* path;
@@ -114,7 +116,7 @@ void addText(char* conceito, char* subtitulo, char* texto){
     }
 }
 
-// Escreve os triplos
+// Adicionar os triplos ao ficheiro HTML
 void addTriplos (char* conceito, char* texto){
     if(conceito && texto){
         char* path;
@@ -126,6 +128,7 @@ void addTriplos (char* conceito, char* texto){
     }
 }
 
+// Gerar o ficheiro HTML para cada sujeito/objeto
 void generateTriplo (char* name) {
 
     if (name[strlen(name)-1] == ' ') name[strlen(name)-1] = '\0';
@@ -140,6 +143,7 @@ void generateTriplo (char* name) {
     free(path);
 }
 
+// Formatar o nome de um sujeito/objeto
 char* formatName (char* name) {
     char* nameFormated;
     asprintf(&nameFormated, "%s", name);
@@ -151,6 +155,7 @@ char* formatName (char* name) {
     return nameFormated;
 }
 
+// Adicionar as imagens ao ficheiro HTML
 void addImages (char* sujeito){
 
     if (sujeito[strlen(sujeito)-1] == ' ') sujeito[strlen(sujeito)-1] = '\0';
@@ -185,6 +190,7 @@ void addImages (char* sujeito){
     }
 }
 
+// Finalizar todos os ficheiros HTML
 void finalizeFiles(){
     char *command; 
     asprintf(&command, "cd base; ls -d */ | sed 's/.$//' > output ");
@@ -231,11 +237,7 @@ void finalizeFiles(){
     }
 }
 
-
-/*
- *  actions in index.html
- */
-
+// Gerar o index
 void generateIndexHtml(){
     system("mkdir base ; cd base ; touch index.html");
     FILE* file = fopen(indexPath,"w");
@@ -243,6 +245,7 @@ void generateIndexHtml(){
     fclose(file);
 }
 
+// Adicionar um conceito ao index
 void writeInIndexHtml(char* path, char* name){
 
     if(path && name){
@@ -267,6 +270,7 @@ void writeInIndexHtml(char* path, char* name){
     }
 }
 
+// Finalizar o index
 void finalizeIndexHtml(){
     FILE* file = fopen(indexPath,"a");
     fprintf(file, "\t\t</div>\n\t</body>\n</html>");
@@ -285,6 +289,7 @@ int main(int argc, char* argv[]){
     g_array_free (buff, TRUE);
 	return 0;
 }
+
 
 void yyerror(char* s){
     extern int yylineno;
