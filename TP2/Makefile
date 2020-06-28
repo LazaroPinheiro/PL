@@ -8,7 +8,5 @@ DSL: DSL.fl DSL.y
 
 
 clean:
-	rm -f DSL
-	rm -f *.c
-	rm -f *.h
+	rm -f DSL *.c *.h
 	if [ -a base ]; then rm -r base; fi;
