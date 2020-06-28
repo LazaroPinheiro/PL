@@ -91,7 +91,7 @@ void fileGenerator(char* name, int isConcept){
             free(command);
 
             FILE* file = fopen(path,"w");
-            fprintf(file, "<!DOCTYPE html>\n\t<html lang=\"pt-pt\">\n\t<head>\n\t\t<title>%s</title>\n\t\t<meta charset=\"utf-8\">\n\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\t\t<link rel=\"stylesheet\" href=\"https://www.w3schools.com/w3css/4/w3.css\">\n\t\t<style>.borderexample {border-style:solid;border-color:#063c79;padding: 15px;}\n\n\t\t\tdiv.cabecalho {\n\t\t\t\ttext-align: center;\n\t\t\t}\n\n\t\t\tdiv.imagens {\n\t\t\t\twidth:100%%;\n\t\t\t\ttext-align:center;\n\t\t\t}\n\t\t\tdiv.imagem {\n\t\t\t\tdisplay:inline-block;\n\t\t\t}\n\t\t</style>\n\t</head>\n\t<body>\n\t\t<div class=\"w3-bar w3-black\">\n\t\t\t<a href=\"../../%s\" class=\"w3-bar-item w3-button\">Home</a>\n\t\t</div>\n\t\t<div class=\"cabecalho\">\n\t\t\t<h1>%s</h1>\n\t\t</div>\n\n\t\t<div class=\"documento\">\n", nameFormated, indexPath, name);
+            fprintf(file, "<!DOCTYPE html>\n\t<html lang=\"pt-pt\">\n\t<head>\n\t\t<title>%s</title>\n\t\t<meta charset=\"utf-8\">\n\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\t\t<link rel=\"stylesheet\" href=\"https://www.w3schools.com/w3css/4/w3.css\">\n\t\t<style>\n\t\t\tdiv.triplos {border: 1px solid black;padding: 25px 50px 75px 100px;background-color: lightblue;}\n\t\t\tdiv.cabecalho {\n\t\t\t\ttext-align: center;\n\t\t\t}\n\t\t\tdiv.imagens {\n\t\t\t\twidth:100%%;\n\t\t\t\ttext-align:center;\n\t\t\t}\n\t\t\tdiv.imagem {\n\t\t\t\tdisplay:inline-block;\n\t\t\t}\n\t\t</style>\n\t</head>\n\t<body>\n\t\t<div class=\"w3-bar w3-black\">\n\t\t\t<a href=\"../../%s\" class=\"w3-bar-item w3-button\">Home</a>\n\t\t</div>\n\t\t<div class=\"cabecalho\">\n\t\t\t<h1>%s</h1>\n\t\t</div>\n\n\t\t<div class=\"documento\">\n", nameFormated, indexPath, name);
             fclose(file);
         }
 
@@ -156,14 +156,31 @@ void addImages (char* sujeito){
     if (sujeito[strlen(sujeito)-1] == ' ') sujeito[strlen(sujeito)-1] = '\0';
 
     if(imageCount > 0){
-        Imagens imagens = (Imagens)malloc(sizeof(struct imagens));
-        asprintf(&imagens->sujeito, "%s", sujeito);
-        imagens->numImgs = imageCount;
-        for (int i = 0; i < imageCount; i++){
-            asprintf(imagens->imgs+i, "\t\t\t<img class=\"imagem\" src=\"%s\" width=\"100\" height=\"100\">", imgs[i]);
+        int found = 0;
+        Imagens imagens;
+
+        for(int i = 0 ; i < buff->len && !found ; i++){
+            imagens = g_array_index(buff, Imagens, i);
+            if(strcmp(imagens->sujeito, sujeito) == 0){
+                found = 1;
+                for (int i = imagens->numImgs; i < imagens->numImgs + imageCount && i < NUM_MAX_IMAGES; i++){
+                    asprintf(imagens->imgs+i, "\t\t\t<img class=\"imagem\" src=\"%s\" width=\"100\" height=\"100\">", imgs[i]);
+                }
+                imagens->numImgs += imageCount;
+            }
         }
 
-        g_array_append_val(buff, imagens);
+        if(!found){  
+            imagens = (Imagens)malloc(sizeof(struct imagens));
+            asprintf(&imagens->sujeito, "%s", sujeito);
+            imagens->numImgs = imageCount;
+            for (int i = 0; i < imageCount; i++){
+                asprintf(imagens->imgs+i, "\t\t\t<img class=\"imagem\" src=\"%s\" width=\"100\" height=\"100\">", imgs[i]);
+            }
+
+            g_array_append_val(buff, imagens);
+        }
+
         imageCount = 0;
     }
 }
@@ -188,16 +205,21 @@ void finalizeFiles(){
             asprintf(&path, "base/%s/%s.html", name, name);
             FILE* fp = fopen(path, "a");
             
-            fprintf(fp,"\t\t<div class=\"imagens\">\n\t\t\t<div class=\"cabecalho\">\n\t\t\t\t<h2>Imagens</h2>\n\t\t\t</div>\n");
+            int flag = 0;
             for(int i = 0 ; i < buff->len ; i++){
                 imagens = g_array_index(buff, Imagens, i);
                 if(strcmp(imagens->sujeito, name) == 0){
+                    if(flag == 0){
+                        fprintf(fp,"\t\t<div class=\"imagens\">\n\t\t\t<div class=\"cabecalho\">\n\t\t\t\t<h2>Imagens</h2>\n\t\t\t</div>\n");
+                        flag = 1;
+                    }
                     for(int j = 0; j < imagens->numImgs ; j++ ){
                         fprintf(fp,"%s\n", imagens->imgs[j] );
                         free(imagens->imgs[j]);
                     }
                     free(imagens->sujeito);
                 }
+                flag = 0;
             }
             fprintf(fp, "\t\t</div>\n\t</body>\n</html>");
             fclose(fp);
