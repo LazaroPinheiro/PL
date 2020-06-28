@@ -40,23 +40,23 @@ par : documento triplos                             { addTriplos($1, $2); }
 documento : CONCEITO TITULO topicos                 { generateConceito($1, $2); addText($1, $3); asprintf(&$$, "%s", $1); }
           ;
 
-topicos : topicos SUBTITULO texto                   { asprintf(&$$,"%s\t\t\t\t<h3>%s</h3>\n%s", $1, $2,$3); }
-        |                                           { asprintf(&$$,"");}
+topicos : topicos SUBTITULO texto                   { asprintf(&$$, "%s\t\t\t\t<h3>%s</h3>\n%s", $1, $2,$3); }
+        |                                           { asprintf(&$$, "");}
         ;
 
-texto : texto CONTEUDO                              { asprintf(&$$,"%s\t\t\t\t<p>%s</p>\n\n", $1, $2);}
-      |                                             { asprintf(&$$,"");}
+texto : texto CONTEUDO                              { asprintf(&$$, "%s\t\t\t\t<p>%s</p>\n\n", $1, $2);}
+      |                                             { asprintf(&$$, "");}
       ;
 
-triplos : triplos SUJEITO relacoes                  { asprintf(&$$, "%s\t\t\t<a href=\"../%s/%s.html\"><li>--->%s</li></a>\n%s", $1, formatName($2), formatName($2), $2, $3); }
+triplos : triplos SUJEITO relacoes                  { asprintf(&$$, "%s<ul data-role=\"treeview\"><h4><a href=\"../%s/%s.html\"><h4>%s</h4></a></h4><ul>%s</ul></ul>", $1, formatName($2), formatName($2), $2, $3); }
         |                                           { asprintf(&$$, ""); }
         ;
 
-relacoes : relacoes RELACAO objectos                { asprintf(&$$, "%s\t\t\t\t<h3>%s</h3>\n%s", $1, $2, $3); }
+relacoes : relacoes RELACAO objectos                { asprintf(&$$, "%s<ul data-role=\"treeview\"><h5>%s</h5><ul>%s</ul></ul>", $1, $2, $3); }
          |                                          { asprintf(&$$, ""); }
          ;
 
-objectos : objectos OBJECTO                         { generateTriplo($2); asprintf(&$$, "%s\t\t\t<a href=\"../%s/%s.html\"><li>%s</li></a>\n", $1, formatName($2), formatName($2), $2); }
+objectos : objectos OBJECTO                         { generateTriplo($2); asprintf(&$$, "%s<a href=\"../%s/%s.html\"><p>%s</p></a>\n", $1, formatName($2), formatName($2), $2); }
          |                                          { asprintf(&$$, ""); }
          ;
 
@@ -71,7 +71,7 @@ void generateConceito(char* conceito, char* titulo){
 
         asprintf(&path,"base/%s/%s.html",conceito, conceito);
         FILE* file = fopen(path,"w");
-        fprintf(file, "<!DOCTYPE html>\n\t<html lang=\"pt-pt\">\n\t<head>\n\t\t<title>%s</title>\n\t\t<meta charset=\"utf-8\">\n\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\t\t<link rel=\"stylesheet\" href=\"https://www.w3schools.com/w3css/4/w3.css\">\n\t\t<style>\n\t\t\tdiv.cabecalho {\n\t\t\t\ttext-align: center;\n\t\t\t}\n\t\t</style>\n\t</head>\n\t<body>\n\t\t<div class=\"w3-bar w3-black\"><a href=\"../../%s\" class=\"w3-bar-item w3-button\">Home</a></div>\n\t\t<div class=\"documento\">\n\t\t\t<div class=\"cabecalho\">\n\t\t\t\t<h1>%s</h1>\n\t\t\t\t<h2>%s</h2>\n\t\t\t</div>\n\n", conceito, indexPath, conceito,titulo);
+        fprintf(file, "<!DOCTYPE html>\n\t<html lang=\"pt-pt\">\n\t<head>\n\t\t<title>%s</title>\n\t\t<meta charset=\"utf-8\">\n\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\t\t<link rel=\"stylesheet\" href=\"https://www.w3schools.com/w3css/4/w3.css\">\n\t\t<style>.borderexample {border-style:solid;border-color:#063c79;padding: 15px;}\n\n\t\t\tdiv.cabecalho {\n\t\t\t\ttext-align: center;\n\t\t\t}\n\t\t</style>\n\t</head>\n\t<body>\n\t\t<div class=\"w3-bar w3-black\"><a href=\"../../%s\" class=\"w3-bar-item w3-button\">Home</a></div>\n\t\t<div class=\"documento\">\n\t\t\t<div class=\"cabecalho\">\n\t\t\t\t<h1>%s</h1>\n\t\t\t\t<h2>%s</h2>\n\t\t\t</div>\n\n", conceito, indexPath, conceito,titulo);
         fclose(file);
         writeInIndexHtml(path+5, conceito);
         free(path);
@@ -96,7 +96,7 @@ void addTriplos (char* conceito, char* texto){
         char* path;
         asprintf(&path,"base/%s/%s.html",conceito, conceito);
         FILE* file = fopen(path,"a");
-        fprintf(file, "\t\t\t<div class=\"triplos\">\n\t\t\t<div class=\"cabecalho\">\n<h2>Triplos</h2>\n</div>\n%s\t\t\t</div>\n\t\t</div>\n", texto);
+        fprintf(file, "<div class=\"triplos\">\n<div class=\"cabecalho\">\n<h2>Triplos</h2>\n</div>\n%s</div>\n</div>\n", texto);
         fclose(file);
         free(path);
     }
