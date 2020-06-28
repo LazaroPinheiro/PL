@@ -275,6 +275,8 @@ void finalizeIndexHtml(){
 
 
 int main(int argc, char* argv[]){
+    extern FILE *yyin;
+    if(argc > 1){ yyin = fopen(argv[1],"r"); }else{perror("Argumentos Insuficientes!");}
     buff = g_array_new(FALSE, FALSE, sizeof(Imagens));
     generateIndexHtml();
     yyparse();
