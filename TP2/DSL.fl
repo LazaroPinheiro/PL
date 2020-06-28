@@ -40,6 +40,7 @@
 <OBJ>[ ,\n\"]                               ;
 
 <IMG>\.                                     { BEGIN SUJ; }
+<IMG>;                                      { BEGIN REL; }
 <IMG>\".*/\"                                { yylval.string = strdup(yytext+1); return IMAGEM; }
 <IMG>[ ,\n\"]                               ;
 
