@@ -165,6 +165,32 @@ void addImages (char* sujeito){
     imageCount = 0;
 }
 
+void finalizeFiles(){
+    char *command; 
+    asprintf(&command, "cd base; ls -d */ | sed 's/.$//' > output ");
+    system(command);
+    free(command);
+
+    FILE* f = fopen("base/output", "r");
+    char directory[128];
+    char* path;
+
+    if(!f){
+        perror("Ocorreu um erro!\n");
+    }else{
+        while (fgets(directory, 128, f)){
+            asprintf(&path, "base/%s/%s.html", strtok (directory, "\n"), strtok (directory, "\n"));
+            FILE* fp = fopen(path, "a");
+            fprintf(fp, "\t\t</div>\n\t</body>\n</html>");
+            fclose(fp);
+            free(path);
+        }
+        fclose(f);
+
+        system("cd base; rm -f output");
+    }
+}
+
 
 /*
  *  actions in index.html
@@ -213,6 +239,7 @@ int main(int argc, char* argv[]){
     generateIndexHtml();
     yyparse();
     finalizeIndexHtml();
+    finalizeFiles();
 	return 0;
 }
 
