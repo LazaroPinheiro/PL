@@ -66,14 +66,14 @@ toda a distracção, toda a frouxidão, tudo o que frequentemente torna obscura 
    :partidos_políticos  "Centro Católico Português",
                         "União Nacional" ;
    :religião  "Catolicismo Romano";
-   :img "Salazar.jpg" .
+   :img "https://zap.aeiou.pt/wp-content/uploads/2018/08/c4ca4238a0b923820dcc509a6f75849b.jpg" .
 
 :PIDE 
    :fundador :Salazar .
 
-:Hitler 
+:Hitler
    :fantasiava_com :Salazar ;
-   :img "Fantasia.jpg" .
+   :img "https://pbs.twimg.com/profile_images/669076180759220224/8nDlSctq_400x400.jpg" .
 
 :MariaSalazar
    :mãe_de :Salazar ;
@@ -160,7 +160,7 @@ o sentido da palavra em idiomas como o inglês, atribuindo-lhe uma conotação p
    :partidos_políticos  "Partido Alemão dos Trabalhadores",
                         "Partido Nazi" ;
    :religião  "Visão religiosa de Adolf Hitler";
-   :img "Hitler.jpg" .
+   :img "https://upload.wikimedia.org/wikipedia/commons/e/ee/Adolf_Hitler_Berghof-1936.jpg" .
 
 :EvaBraun 
    :casada_com :Hitler,
@@ -239,15 +239,19 @@ particular e um iate de 30 metros. Rodman descreveu sua viagem à ilha privada d
                :Köniz,
                :Pyongyang;
    :partidos_políticos  "Partido dos Trabalhadores da Coreia" ;
-   :img "Jong-un.jpg" .
+   :img "https://emc.acidadeon.com/dbimagens/kim_jong__05052017103837.jpg" .
 
 :Sol-ju
    :casada_com :Jong-un,
    :name "Ri Sol-ju" .
 
+:Misseis_Potentes
+   :criador :Jong-un ;
+   :img "https://i0.wp.com/www.geonoticias.com.br/wp-content/uploads/2019/05/kim-jong-un-e-m%C3%ADssel.jpg?fit=1008%2C670&ssl=1" .
+
 :Hitler 
    :inspirou :Jong-un ;
-   :img "Misseis_Potentes.jpg" .
+   :img "https://emc.acidadeon.com/dbimagens/kim_jong__05052017103837.jpg" .
 
 :Young-hee
    :mãe_de :Jong-un ;
@@ -258,3 +262,7 @@ particular e um iate de 30 metros. Rodman descreveu sua viagem à ilha privada d
    :pai_de :Jong-un ;
    :name "Kim Jong-il" ;
    :casou_com :Young-hee.
+
+:Trump
+   :melhor_amigo :Jong-un ;
+   :img "https://bordalo.observador.pt/500x,q85/https://s3.observador.pt/wp-content/uploads/2019/02/27120354/GettyImages-1127683871_770x433_acf_cropped.jpg" .
