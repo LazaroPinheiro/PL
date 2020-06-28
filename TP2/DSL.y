@@ -64,7 +64,7 @@ texto : texto CONTEUDO                              { asprintf(&$$, "%s\t\t\t\t<
       |                                             { asprintf(&$$, "");}
       ;
 
-triplos : triplos SUJEITO relacoes                  { generateTriplo($2); asprintf(&$$, "%s\t\t\t<ul data-role=\"treeview\">\n\t\t\t\t<h4>\n\t\t\t\t\t<a href=\"../%s/%s.html\">\n\t\t\t\t\t\t<h4>%s</h4>\n\t\t\t\t\t</a>\n\t\t\t\t</h4>\n\t\t\t\t<ul>%s\n\t\t\t\t</ul>\n\t\t\t</ul>\n", $1, formatName($2), formatName($2), $2, $3); addImages($2); }
+triplos : triplos SUJEITO relacoes                  { generateTriplo($2); asprintf(&$$, "%s\t\t\t<ul data-role=\"treeview\">\n\t\t\t\t<a href=\"../%s/%s.html\">\n\t\t\t\t\t<h4>%s</h4>\n\t\t\t\t</a>\n\t\t\t\t<ul>%s\n\t\t\t\t</ul>\n\t\t\t</ul>\n", $1, formatName($2), formatName($2), $2, $3); addImages($2); }
         |                                           { asprintf(&$$, ""); }
         ;
 
