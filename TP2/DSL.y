@@ -53,7 +53,7 @@ caderno : caderno par
 par : documento triplos                             { addTriplos($1, $2); } 
     ;
 
-documento : CONCEITO TITULO topicos                 { fileGenerator($1, TRUE); addText($1, $2, $3); }//asprintf(&$$, "%s", $1); }
+documento : CONCEITO TITULO topicos                 { fileGenerator($1, TRUE); addText($1, $2, $3); }
           ;
 
 topicos : topicos SUBTITULO texto                   { asprintf(&$$, "%s\t\t\t\t<h3>%s</h3>\n%s", $1, $2,$3); }
