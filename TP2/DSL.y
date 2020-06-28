@@ -20,9 +20,19 @@
     void addTriplos(char*, char*);
     char* formatName (char*);
     void writeInIndexHtml(char*, char*);
+    void addImages (char*);
 
     char* indexPath = "base/index.html";
-    char* image = "";
+
+    typedef struct imagens {
+        char* sujeito;
+        char* imgs[5];
+    } *Imagens;
+
+    GArray *buff;
+
+    char* imgs[5];
+    int imageCount = 0;
 %}
 
 %union{
@@ -52,7 +62,7 @@ texto : texto CONTEUDO                              { asprintf(&$$, "%s\t\t\t\t<
       |                                             { asprintf(&$$, "");}
       ;
 
-triplos : triplos SUJEITO relacoes                  { generateTriplo($2); asprintf(&$$, "%s<ul data-role=\"treeview\"><h4><a href=\"../%s/%s.html\"><h4>%s</h4></a></h4><ul>%s</ul></ul>", $1, formatName($2), formatName($2), $2, $3); }
+triplos : triplos SUJEITO relacoes                  { generateTriplo($2); asprintf(&$$, "%s<ul data-role=\"treeview\"><h4><a href=\"../%s/%s.html\"><h4>%s</h4></a></h4><ul>%s</ul></ul>", $1, formatName($2), formatName($2), $2, $3); addImages($2); }
         |                                           { asprintf(&$$, ""); }
         ;
 
@@ -61,7 +71,7 @@ relacoes : relacoes RELACAO objectos                { asprintf(&$$, "%s<ul data-
          ;
 
 objectos : objectos OBJECTO                         { generateTriplo($2); asprintf(&$$, "%s<a href=\"../%s/%s.html\"><p>%s</p></a>\n", $1, formatName($2), formatName($2), $2); }
-         | objectos IMAGEM                          { asprintf(&$$, "%s", $1); }
+         | objectos IMAGEM                          { asprintf(&$$, "%s", $1); asprintf(imgs+imageCount, "%s", $2); imageCount++; }
          |                                          { asprintf(&$$, ""); }
          ;
 
@@ -138,6 +148,22 @@ char* formatName (char* name) {
     return nameFormated;
 }
 
+void addImages (char* sujeito){
+
+    char* path;
+    if (sujeito[strlen(sujeito)-1] == ' ') sujeito[strlen(sujeito)-1] = '\0';
+    asprintf(&path, "base/%s/%s.html", sujeito, sujeito);
+    FILE* file = fopen(path, "a");
+
+    for (int i = 0; i < imageCount; i++){
+        fprintf(file, "<img src=\"%s\" width=\"100\" height=\"100\">\n", imgs[i]);
+    }
+
+    fclose(file);
+    free(path);
+    imageCount = 0;
+}
+
 
 /*
  *  actions in index.html
@@ -182,6 +208,7 @@ void finalizeIndexHtml(){
 
 
 int main(int argc, char* argv[]){
+    buff = g_array_new(FALSE, FALSE, sizeof(Imagens));
     generateIndexHtml();
     yyparse();
     finalizeIndexHtml();
