@@ -16,12 +16,10 @@
 
     void fileGenerator(char*, int);
     void addText(char*, char*, char*);
-
-    void generateConceito(char*, char*);
-    void writeInIndexHtml(char*, char*);
-    void addTriplos(char*, char*);
     void generateTriplo (char*);
+    void addTriplos(char*, char*);
     char* formatName (char*);
+    void writeInIndexHtml(char*, char*);
 
     char* indexPath = "base/index.html";
     char* image = "";
