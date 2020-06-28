@@ -62,15 +62,15 @@ texto : texto CONTEUDO                              { asprintf(&$$, "%s\t\t\t\t<
       |                                             { asprintf(&$$, "");}
       ;
 
-triplos : triplos SUJEITO relacoes                  { generateTriplo($2); asprintf(&$$, "%s<ul data-role=\"treeview\"><h4><a href=\"../%s/%s.html\"><h4>%s</h4></a></h4><ul>%s</ul></ul>", $1, formatName($2), formatName($2), $2, $3); addImages($2); }
+triplos : triplos SUJEITO relacoes                  { generateTriplo($2); asprintf(&$$, "%s\t\t\t<ul data-role=\"treeview\">\n\t\t\t\t<h4>\n\t\t\t\t\t<a href=\"../%s/%s.html\">\n\t\t\t\t\t\t<h4>%s</h4>\n\t\t\t\t\t</a>\n\t\t\t\t</h4>\n\t\t\t\t<ul>%s\n\t\t\t\t</ul>\n\t\t\t</ul>\n", $1, formatName($2), formatName($2), $2, $3); addImages($2); }
         |                                           { asprintf(&$$, ""); }
         ;
 
-relacoes : relacoes RELACAO objectos                { asprintf(&$$, "%s<ul data-role=\"treeview\"><h5>%s</h5><ul>%s</ul></ul>", $1, $2, $3); }
+relacoes : relacoes RELACAO objectos                { asprintf(&$$, "%s\n\t\t\t\t\t<ul data-role=\"treeview\">\n\t\t\t\t\t\t<h5>%s</h5>\n\t\t\t\t\t\t<ul>\n%s\t\t\t\t\t\t</ul>\n\t\t\t\t\t</ul>", $1, $2, $3); }
          |                                          { asprintf(&$$, ""); }
          ;
 
-objectos : objectos OBJECTO                         { generateTriplo($2); asprintf(&$$, "%s<a href=\"../%s/%s.html\"><p>%s</p></a>\n", $1, formatName($2), formatName($2), $2); }
+objectos : objectos OBJECTO                         { generateTriplo($2); asprintf(&$$, "%s\t\t\t\t\t\t\t<a href=\"../%s/%s.html\">\n\t\t\t\t\t\t\t\t<p>%s</p>\n\t\t\t\t\t\t\t</a>\n", $1, formatName($2), formatName($2), $2); }
          | objectos IMAGEM                          { asprintf(&$$, "%s", $1); asprintf(imgs+imageCount, "%s", $2); imageCount++; }
          |                                          { asprintf(&$$, ""); }
          ;
@@ -89,7 +89,7 @@ void fileGenerator(char* name, int isConcept){
             free(command);
 
             FILE* file = fopen(path,"w");
-            fprintf(file, "<!DOCTYPE html>\n\t<html lang=\"pt-pt\">\n\t<head>\n\t\t<title>%s</title>\n\t\t<meta charset=\"utf-8\">\n\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\t\t<link rel=\"stylesheet\" href=\"https://www.w3schools.com/w3css/4/w3.css\">\n\t\t<style>.borderexample {border-style:solid;border-color:#063c79;padding: 15px;}\n\n\t\t\tdiv.cabecalho {\n\t\t\t\ttext-align: center;\n\t\t\t}\n\n\t\t\t.TextWrap {\n\t\t\t\tfloat: right;\n\t\t\t\tmargin: 30px;\n\t\t\t}\n\t\t</style>\n\t</head>\n\t<body>\n\t\t<div class=\"w3-bar w3-black\"><a href=\"../../%s\" class=\"w3-bar-item w3-button\">Home</a></div>\n\t\t<div class=\"cabecalho\">\n\t\t\t<h1>%s</h1>\n\t\t</div>\n\n\t\t<div class=\"documento\">", nameFormated, indexPath, name);
+            fprintf(file, "<!DOCTYPE html>\n\t<html lang=\"pt-pt\">\n\t<head>\n\t\t<title>%s</title>\n\t\t<meta charset=\"utf-8\">\n\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\t\t<link rel=\"stylesheet\" href=\"https://www.w3schools.com/w3css/4/w3.css\">\n\t\t<style>.borderexample {border-style:solid;border-color:#063c79;padding: 15px;}\n\n\t\t\tdiv.cabecalho {\n\t\t\t\ttext-align: center;\n\t\t\t}\n\n\t\t\t.TextWrap {\n\t\t\t\tfloat: right;\n\t\t\t\tmargin: 30px;\n\t\t\t}\n\t\t</style>\n\t</head>\n\t<body>\n\t\t<div class=\"w3-bar w3-black\">\n\t\t\t<a href=\"../../%s\" class=\"w3-bar-item w3-button\">Home</a>\n\t\t</div>\n\t\t<div class=\"cabecalho\">\n\t\t\t<h1>%s</h1>\n\t\t</div>\n\n\t\t<div class=\"documento\">\n", nameFormated, indexPath, name);
             fclose(file);
         }
 
@@ -118,7 +118,7 @@ void addTriplos (char* conceito, char* texto){
         char* path;
         asprintf(&path,"base/%s/%s.html",conceito, conceito);
         FILE* file = fopen(path,"a");
-        fprintf(file, "<div class=\"triplos\">\n<div class=\"cabecalho\">\n<h2>Triplos</h2>\n</div>\n%s</div>\n</div>\n", texto);
+        fprintf(file, "\t\t<div class=\"triplos\">\n\t\t\t<div class=\"cabecalho\">\n\t\t\t\t<h2>Triplos</h2>\n\t\t\t</div>\n%s\t\t</div>\n", texto);
         fclose(file);
         free(path);
     }
@@ -157,7 +157,7 @@ void addImages (char* sujeito){
     FILE* file = fopen(path, "a");
 
     for (int i = 0; i < imageCount; i++){
-        fprintf(file, "<img class=\"TextWrap\" src=\"%s\" width=\"100\" height=\"100\">\n", imgs[i]);
+        fprintf(file, "\n\t\t<img class=\"TextWrap\" src=\"%s\" width=\"100\" height=\"100\">\n\n", imgs[i]);
     }
 
     fclose(file);
@@ -181,7 +181,7 @@ void finalizeFiles(){
         while (fgets(directory, 128, f)){
             asprintf(&path, "base/%s/%s.html", strtok (directory, "\n"), strtok (directory, "\n"));
             FILE* fp = fopen(path, "a");
-            fprintf(fp, "\t\t</div>\n\t</body>\n</html>");
+            fprintf(fp, "\t</body>\n</html>");
             fclose(fp);
             free(path);
         }
