@@ -187,19 +187,20 @@ void finalizeFiles(){
             name = strtok (directory, "\n");
             asprintf(&path, "base/%s/%s.html", name, name);
             FILE* fp = fopen(path, "a");
-
+            
+            fprintf(fp,"\t\t<div class=\"imagens\">\n\t\t\t<div class=\"cabecalho\">\n\t\t\t\t<h2>Imagens</h2>\n\t\t\t</div>\n");
             for(int i = 0 ; i < buff->len ; i++){
                 imagens = g_array_index(buff, Imagens, i);
                 if(strcmp(imagens->sujeito, name) == 0){
-                    fprintf(fp,"\t\t<div class=\"imagens\">\n\t\t\t<div class=\"cabecalho\">\n\t\t\t\t<h2>Imagens</h2>\n\t\t\t</div>\n");
                     for(int j = 0; j < imagens->numImgs ; j++ ){
                         fprintf(fp,"%s\n", imagens->imgs[j] );
+                        free(imagens->imgs[j]);
                     }
-                    fprintf(fp,"\t\t</div>");
+                    free(imagens->sujeito);
+                    free(imagens);
                 }
             }
-
-            fprintf(fp, "\t</body>\n</html>");
+            fprintf(fp, "\t\t</div>\n\t</body>\n</html>");
             fclose(fp);
             free(path);
         }
