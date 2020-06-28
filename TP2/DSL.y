@@ -160,7 +160,7 @@ void addImages (char* sujeito){
         asprintf(&imagens->sujeito, "%s", sujeito);
         imagens->numImgs = imageCount;
         for (int i = 0; i < imageCount; i++){
-            asprintf(imagens->imgs+i, "\n\t\t\t<img class=\"imagem\" src=\"%s\" width=\"100\" height=\"100\">\n\n", imgs[i]);
+            asprintf(imagens->imgs+i, "\t\t\t<img class=\"imagem\" src=\"%s\" width=\"100\" height=\"100\">", imgs[i]);
         }
 
         g_array_append_val(buff, imagens);
@@ -197,7 +197,6 @@ void finalizeFiles(){
                         free(imagens->imgs[j]);
                     }
                     free(imagens->sujeito);
-                    free(imagens);
                 }
             }
             fprintf(fp, "\t\t</div>\n\t</body>\n</html>");
@@ -259,6 +258,7 @@ int main(int argc, char* argv[]){
     yyparse();
     finalizeIndexHtml();
     finalizeFiles();
+    g_array_free (buff, TRUE);
 	return 0;
 }
 
