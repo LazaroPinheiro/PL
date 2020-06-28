@@ -71,6 +71,10 @@ toda a distracção, toda a frouxidão, tudo o que frequentemente torna obscura 
 :PIDE 
    :fundador :Salazar .
 
+:Hitler 
+   :fantasiava_com :Salazar ;
+   :img "Fantasia.jpg" .
+
 :MariaSalazar
    :mãe_de :Salazar ;
    :name "Maria do Resgate Salazar" ;
@@ -240,6 +244,10 @@ particular e um iate de 30 metros. Rodman descreveu sua viagem à ilha privada d
 :Sol-ju
    :casada_com :Jong-un,
    :name "Ri Sol-ju" .
+
+:Hitler 
+   :inspirou :Jong-un ;
+   :img "Misseis_Potentes.jpg" .
 
 :Young-hee
    :mãe_de :Jong-un ;

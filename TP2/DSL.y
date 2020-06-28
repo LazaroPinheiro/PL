@@ -91,7 +91,7 @@ void fileGenerator(char* name, int isConcept){
             free(command);
 
             FILE* file = fopen(path,"w");
-            fprintf(file, "<!DOCTYPE html>\n\t<html lang=\"pt-pt\">\n\t<head>\n\t\t<title>%s</title>\n\t\t<meta charset=\"utf-8\">\n\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\t\t<link rel=\"stylesheet\" href=\"https://www.w3schools.com/w3css/4/w3.css\">\n\t\t<style>\n\t\t\tdiv.triplos {border: 1px solid black;padding: 25px 50px 75px 100px;background-color: lightblue;}\n\t\t\tdiv.cabecalho {\n\t\t\t\ttext-align: center;\n\t\t\t}\n\t\t\tdiv.imagens {\n\t\t\t\twidth:100%%;\n\t\t\t\ttext-align:center;\n\t\t\t}\n\t\t\tdiv.imagem {\n\t\t\t\tdisplay:inline-block;\n\t\t\t}\n\t\t</style>\n\t</head>\n\t<body>\n\t\t<div class=\"w3-bar w3-black\">\n\t\t\t<a href=\"../../%s\" class=\"w3-bar-item w3-button\">Home</a>\n\t\t</div>\n\t\t<div class=\"cabecalho\">\n\t\t\t<h1>%s</h1>\n\t\t</div>\n\n\t\t<div class=\"documento\">\n", nameFormated, indexPath, name);
+            fprintf(file, "<!DOCTYPE html>\n\t<html lang=\"pt-pt\">\n\t<head>\n\t\t<title>%s</title>\n\t\t<meta charset=\"utf-8\">\n\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\t\t<link rel=\"stylesheet\" href=\"https://www.w3schools.com/w3css/4/w3.css\">\n\t\t<style>\n\t\t\tdiv.triplos {border: 1px solid black;padding: 25px 50px 75px 100px;background-color: lightblue;}\n\t\t\tdiv.cabecalho {\n\t\t\t\ttext-align: center;\n\t\t\t}\n\t\t\tdiv.imagens {\n\t\t\t\twidth:100%%;\n\t\t\t\ttext-align:center;\n\t\t\t}\n\t\t\tdiv.imagem {\n\t\t\t\tdisplay:inline-block;\n\t\t\t}\n\t\t</style>\n\t</head>\n\t<body>\n\t\t<div class=\"w3-bar w3-black\">\n\t\t\t<a href=\"../../%s\" class=\"w3-bar-item w3-button\">Home</a>\n\t\t</div>\n\t\t<div class=\"cabecalho\">\n\t\t\t<h1>%s</h1>\n\t\t</div>\n", nameFormated, indexPath, name);
             fclose(file);
         }
 
@@ -108,7 +108,7 @@ void addText(char* conceito, char* subtitulo, char* texto){
         char* path;
         asprintf(&path,"base/%s/%s.html",conceito, conceito);
         FILE* file = fopen(path,"a");
-        fprintf(file, "\t\t\t<div class=\"cabecalho\">\n\t\t\t\t<h2>%s</h2>\n\t\t\t</div>\n\t\t\t<div class=\"topicos\">\n%s\t\t\t</div>\n\t\t</div>\n", subtitulo, texto);
+        fprintf(file, "\n\t\t<div class=\"documento\">\n\t\t\t<div class=\"cabecalho\">\n\t\t\t\t<h2>%s</h2>\n\t\t\t</div>\n\t\t\t<div class=\"topicos\">\n%s\t\t\t</div>\n\t\t</div>\n", subtitulo, texto);
         fclose(file);
         free(path);
     }
@@ -221,7 +221,7 @@ void finalizeFiles(){
                 }
                 flag = 0;
             }
-            fprintf(fp, "\t\t</div>\n\t</body>\n</html>");
+            fprintf(fp, "\n\t</body>\n</html>");
             fclose(fp);
             free(path);
         }
